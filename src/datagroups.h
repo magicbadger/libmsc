@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "../../libmot/src/mot.h"
+#include "mot.h"
 
 using namespace mot;
 using namespace std;
@@ -25,11 +25,6 @@ private:
 
 };
 
-vector<unsigned char> calculate_crc(vector<unsigned char> data)
-{
-	// uuuuuhhhhh yeh. CRC goes here. I guess.
-	return "AB";
-}
-
+unsigned short calculate_crc(vector<unsigned char> buf);
 
 #endif
