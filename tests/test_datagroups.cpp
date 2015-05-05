@@ -12,7 +12,7 @@ using namespace std;
 
 TEST_CASE( "MSC datagroup encoding tests", "[mscdatagroup]" ) {
 
-	SECTION ("MOT_HEADER_MODE") {
+	SECTION ("DATAGROUP") {
 		string data("=====");
 		vector<unsigned char> bytes;
 		copy(data.begin(), data.end(), back_inserter(bytes));

@@ -11,7 +11,7 @@ ifeq ($(UNAME), Windows_NT)
 	CPPFLAGS = -I../src
 	TARGETS = $(OBJECTS:.o=.exe)
 else
-	CXX = clang++ 
+	#CXX = clang++ 
 	CPPFLAGS = -I../src -I../../libmot/src -std=c++11 -stdlib=libc++ #-Weverything
 	TARGETS = $(OBJECTS:.o=)
 endif

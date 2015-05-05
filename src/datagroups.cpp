@@ -40,7 +40,8 @@ vector<unsigned char> Datagroup::encode()
 	bytes = bytes + segment.encode();
 
 	// calculate CRC
-	bytes = bytes + bits_to_bytes(bitset<16>(calculate_crc(bytes)));
+    vector<unsigned char> crc_data = bits_to_bytes(bitset<16>(calculate_crc(bytes)));
+	bytes = bytes + crc_data; 
 
 	return bytes;
 }
