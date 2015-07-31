@@ -9,7 +9,7 @@ Encoder/Decoder for MSC Datagroup and Packet data as per ETSI 300 401 Section 5.
 
 Encoding a simple text MOT object into Datagroups and write out the resultant data to the console.
 
-```
+```cpp
 #include <vector>
 #include <iostream>
 
