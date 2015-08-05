@@ -25,6 +25,4 @@ private:
 
 };
 
-unsigned short calculate_crc(vector<unsigned char> buf);
-
 #endif

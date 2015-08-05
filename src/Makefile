@@ -2,11 +2,11 @@
 
 UNAME := $(shell uname)
 ifeq ($(UNAME), Windows_NT)
-	TARGET = mscdatagroups.dll
+	TARGET = msc.dll
 else
 	#CXX = clang++ 
 	CPPFLAGS = -I../../libmot/src -O2 -std=c++11 -stdlib=libc++ #-Weverything
-	TARGET = libmscdatagroups.so
+	TARGET = libmsc.so
 endif
 
 LDFLAGS= -shared -std=c++11 -stdlib=libc++ -L../../libmot -lmot

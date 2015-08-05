@@ -5,6 +5,14 @@ Encoder/Decoder for MSC Datagroup and Packet data as per ETSI 300 401 Section 5.
 
 # Current Status
 
+Able to do some simple encoding of MOT objects. Entirely couple with `libmot` right now, in respects that it can only encode `Segment` objects into Datagroups.
+
+# TODO
+
+* Decouple from libmot (provide methods to encode non-segment data)
+* Datagroup decoding
+* Packet encoding and decoding
+
 # Examples
 
 Encoding a simple text MOT object into Datagroups and write out the resultant data to the console.
