@@ -4,15 +4,15 @@
 #include "mot.h"
 #include "datagroups.h"
 
-using namespace mot;
 using namespace std;
+using namespace mot;
+using namespace msc;
 
 int main() {
     string data("=====");
     vector<unsigned char> bytes;
     copy(data.begin(), data.end(), back_inserter(bytes));
-    SequentialTransportIdGenerator::initial = 8541;
-    SequentialTransportIdGenerator* id = SequentialTransportIdGenerator::getInstance();
+    SequentialTransportIdGenerator* id = SequentialTransportIdGenerator::getInstance(8541);
     int transportId = id->next();
     MotObject o(transportId, "TestObject", bytes, ContentTypes::Text::ASCII);
     o.addParameter(new MimeType("application/txt"));

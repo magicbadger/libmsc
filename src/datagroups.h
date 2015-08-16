@@ -3,26 +3,43 @@
 
 #include <vector>
 
-#include "mot.h"
+#include <mot.h>
 
 using namespace mot;
 using namespace std;
 
-class Datagroup
-{
+namespace msc {
 
-public:
+    class Datagroup
+    {
 
-	Datagroup(Segment& segment, int continuity);
+    public:
 
-	vector<unsigned char> encode();
+        Datagroup(Segment& segment, int continuity);
 
-private:
+        vector<unsigned char> encode();
 
-	Segment& segment;
+    private:
 
-	int continuity;
+        Segment& segment;
 
-};
+        int continuity;
+
+    };
+
+    class DatagroupEncoder
+    {
+
+    public:
+
+        DatagroupEncoder();
+
+        vector<Datagroup> encode_datagroups(vector<Segment> segments);
+
+    private:
+
+    };
+
+}
 
 #endif

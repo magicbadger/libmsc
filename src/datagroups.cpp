@@ -2,6 +2,7 @@
 #include "common.h"
 
 using namespace std;
+using namespace msc;
 
 Datagroup::Datagroup(Segment& segment, int continuity)
 	: segment(segment), continuity(continuity)
@@ -44,4 +45,23 @@ vector<unsigned char> Datagroup::encode()
 	bytes = bytes + crc_data; 
 
 	return bytes;
+}
+
+DatagroupEncoder::DatagroupEncoder()
+{}
+
+vector<Datagroup> DatagroupEncoder::encode_datagroups(vector<Segment> segments)
+{
+    SegmentDatagroupType last_type;
+    vector<Datagroup> datagroups;
+    int i = 0;
+    for(Segment& segment : segments)
+    {
+        if(last_type && last_type != segment.getType()) i = 0;
+        Datagroup datagroup(segment, i%16);
+        datagroups.push_back(datagroup);
+        i++;
+    }
+
+    return datagroups;
 }
