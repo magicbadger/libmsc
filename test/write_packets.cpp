@@ -1,8 +1,10 @@
 #include <vector>
 #include <iostream>
 
-#include "mot.h"
-#include "datagroups.h"
+#include <mot.h>
+#include <contenttypes.h>
+
+#include "../src/datagroups.h"
 
 using namespace std;
 using namespace mot;
@@ -16,15 +18,16 @@ int main() {
     int transportId = id->next();
     MotObject o(transportId, "TestObject", bytes, ContentTypes::Text::ASCII);
     o.addParameter(new MimeType("application/txt"));
-    SegmentEncoder encoder;
-    vector<Segment*> segments = encoder.encode(o);
-    int i = 0;
-    SegmentDatagroupType last_type;
-    for(Segment* segment : segments)
+    SegmentEncoder segment_encoder;
+    vector<Segment*> segments = segment_encoder.encode(o);
+    DatagroupEncoder datagroup_encoder; 
+    vector<Datagroup*> datagroups = datagroup_encoder.encode_datagroups(segments);
+    PacketEncoder packet_encoder;
+    vector<Packet*> packets = packet_encoder.encode_packets(datagroups);
+
+    for(Packet* packet : packets)
     {
-        if(last_type && last_type != segment->getType()) i = 0;
-        Datagroup d(*segment, i%16);
-        cout << d.encode();
+        cout << packet->encode();
     }
     return  0;
 }

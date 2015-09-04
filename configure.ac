@@ -77,6 +77,6 @@ AM_CONDITIONAL([IS_GIT_REPO], [test -d '.git'])
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 tests/Makefile
+                 test/Makefile
                  ])
 AC_OUTPUT

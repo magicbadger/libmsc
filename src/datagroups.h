@@ -15,13 +15,13 @@ namespace msc {
 
     public:
 
-        Datagroup(Segment& segment, int continuity);
+        Datagroup(Segment* segment, int continuity);
 
-        vector<unsigned char> encode();
+        vector<unsigned char> encode() const;
 
     private:
 
-        Segment& segment;
+        Segment* segment;
 
         int continuity;
 
@@ -34,7 +34,7 @@ namespace msc {
 
         DatagroupEncoder();
 
-        vector<Datagroup> encode_datagroups(vector<Segment> segments);
+        vector<Datagroup*> encode_datagroups(vector<Segment*> segments);
 
     private:
 

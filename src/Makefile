@@ -221,10 +221,10 @@ CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
-CPPFLAGS = -I/Users/ben.poor/git/libmot/src
+CPPFLAGS = 
 CXX = g++
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS =  -std=c++11 -stdlib=libc++
+CXXFLAGS = -g -O0 -I ~/git/libmot/src/ -std=c++11 -stdlib=libc++
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -240,7 +240,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -L/Users/ben.poor/git/libmsc/src -L/Users/ben.poor/git/libmot/src
+LDFLAGS = -L ~/git/libmot/src
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 

@@ -43,12 +43,12 @@ PacketEncoder::PacketEncoder(int address, int size)
     : address(address), size(size), continuity(0)
 {}
 
-vector<Packet> PacketEncoder::encode_packets(vector<Datagroup> datagroups)
+vector<Packet*> PacketEncoder::encode_packets(vector<Datagroup*> datagroups)
 {
-    vector<Packet> packets;
-    for(Datagroup& datagroup : datagroups)
+    vector<Packet*> packets;
+    for(Datagroup* datagroup : datagroups)
     {
-        vector<unsigned char> data = datagroup.encode();
+        vector<unsigned char> data = datagroup->encode();
         vector<unsigned char>::iterator start, end;
         start = end = data.begin();
         bool first = true; 
@@ -61,7 +61,7 @@ vector<Packet> PacketEncoder::encode_packets(vector<Datagroup> datagroups)
             copy(start, end, chunk.begin());
             advance(start, step);
             bool last = (step < size); 
-            packets.push_back(Packet(size, continuity, address, chunk, first, last));
+            packets.push_back(new Packet(size, continuity, address, chunk, first, last));
             continuity = continuity%4;;
         }
     }

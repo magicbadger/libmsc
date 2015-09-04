@@ -45,7 +45,7 @@ namespace msc {
         
         PacketEncoder(int address, int size);
 
-        vector<Packet> encode_packets(vector<Datagroup> datagroups);
+        vector<Packet*> encode_packets(vector<Datagroup*> datagroups);
 
     private:
 

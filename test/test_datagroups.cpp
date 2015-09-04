@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include <mot.h>
+#include <contenttypes.h>
 
 #include "catch.hpp"
 #include "../src/datagroups.h"
@@ -23,12 +24,17 @@ TEST_CASE( "MSC datagroup encoding tests", "[msc]" ) {
 		MotObject o(transportId, "TestObject", bytes, ContentTypes::Text::ASCII);
 		o.addParameter(new MimeType("application/txt"));
 		SegmentEncoder encoder;
-		vector<Segment> segments = encoder.encode(o);
+		vector<Segment*> segments = encoder.encode(o);
+        cout << "encoded into " << segments.size() << " segments" << endl;
         DatagroupEncoder datagroupEncoder;
-        vector<Datagroup> datagroups = datagroupEncoder.encode_datagroups(segments);
-		for(Datagroup datagroup : datagroups)
+        vector<Datagroup*> datagroups = datagroupEncoder.encode_datagroups(segments);
+        cout << "encoded into " << datagroups.size() << " datagroups" << endl;
+		for(Datagroup* datagroup : datagroups)
 		{
-			cout << datagroup.encode();
+            cout << "datagroup" << endl;
+            cout << "=========" << endl;
+			cout << datagroup->encode();
+            cout << endl;
 		}
 	}
 
