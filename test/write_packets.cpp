@@ -5,6 +5,7 @@
 #include <contenttypes.h>
 
 #include "../src/datagroups.h"
+#include "../src/packets.h"
 
 using namespace std;
 using namespace mot;
@@ -22,7 +23,7 @@ int main() {
     vector<Segment*> segments = segment_encoder.encode(o);
     DatagroupEncoder datagroup_encoder; 
     vector<Datagroup*> datagroups = datagroup_encoder.encode_datagroups(segments);
-    PacketEncoder packet_encoder;
+    PacketEncoder packet_encoder(1, 96);
     vector<Packet*> packets = packet_encoder.encode_packets(datagroups);
 
     for(Packet* packet : packets)

@@ -75,6 +75,18 @@ AC_CHECK_FUNCS([bzero gethostbyname gettimeofday inet_ntoa memchr memmove memset
 
 AM_CONDITIONAL([IS_GIT_REPO], [test -d '.git'])
 
+PKG_CHECK_MODULES([libmot], [mot])
+
+# ZeroMQ
+AC_ARG_ENABLE([input_zeromq],
+        [AS_HELP_STRING([--disable-output-zeromq], [Disable ZeroMQ output])],
+        [], [enable_output_zeromq=yes])
+AS_IF([test "x$enable_output_zeromq" = "xyes"],
+       # [AC_CHECK_LIB(zmq, zmq_init, [] , AC_MSG_ERROR(ZeroMQ libzmq is required))])
+        [PKG_CHECK_MODULES([libzmq], [zmq])])
+AS_IF([test "x$enable_output_zeromq" = "xyes"],
+       AC_DEFINE(HAVE_OUTPUT_ZEROMQ, [1], [Define if ZEROMQ output is enabled]))
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  test/Makefile

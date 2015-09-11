@@ -135,9 +135,13 @@ am__v_AR_ = $(am__v_AR_$(AM_DEFAULT_VERBOSITY))
 am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
 libmsc_a_AR = $(AR) $(ARFLAGS)
-libmsc_a_LIBADD =
-am_libmsc_a_OBJECTS = common.$(OBJEXT) datagroups.$(OBJEXT) \
-	packets.$(OBJEXT)
+libmsc_a_DEPENDENCIES =
+am__dirstamp = $(am__leading_dot)dirstamp
+am_libmsc_a_OBJECTS = libmsc_a-common.$(OBJEXT) \
+	libmsc_a-datagroups.$(OBJEXT) libmsc_a-packets.$(OBJEXT) \
+	libmsc_a-output.$(OBJEXT) \
+	output/libmsc_a-console_output.$(OBJEXT) \
+	output/libmsc_a-zmq_output.$(OBJEXT)
 libmsc_a_OBJECTS = $(am_libmsc_a_OBJECTS)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
@@ -155,6 +159,10 @@ DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
+am__v_lt_1 = 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 AM_V_CXX = $(am__v_CXX_$(V))
@@ -182,11 +190,27 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(libmsc_a_SOURCES)
 DIST_SOURCES = $(libmsc_a_SOURCES)
+RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
+	ctags-recursive dvi-recursive html-recursive info-recursive \
+	install-data-recursive install-dvi-recursive \
+	install-exec-recursive install-html-recursive \
+	install-info-recursive install-pdf-recursive \
+	install-ps-recursive install-recursive installcheck-recursive \
+	installdirs-recursive pdf-recursive ps-recursive \
+	tags-recursive uninstall-recursive
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
+am__recursive_targets = \
+  $(RECURSIVE_TARGETS) \
+  $(RECURSIVE_CLEAN_TARGETS) \
+  $(am__extra_recursive_targets)
+AM_RECURSIVE_TARGETS = $(am__recursive_targets:-recursive=) TAGS CTAGS \
+	distdir
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -206,8 +230,34 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+am__relativize = \
+  dir0=`pwd`; \
+  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
+  sed_rest='s,^[^/]*/*,,'; \
+  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
+  sed_butlast='s,/*[^/]*$$,,'; \
+  while test -n "$$dir1"; do \
+    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
+    if test "$$first" != "."; then \
+      if test "$$first" = ".."; then \
+        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
+        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
+      else \
+        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
+        if test "$$first2" = "$$first"; then \
+          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
+        else \
+          dir2="../$$dir2"; \
+        fi; \
+        dir0="$$dir0"/"$$first"; \
+      fi; \
+    fi; \
+    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
+  done; \
+  reldir="$$dir2"
 ACLOCAL = ${SHELL} /Users/ben.poor/git/libmsc/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 0
@@ -224,7 +274,7 @@ CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O0 -I ~/git/libmot/src/ -std=c++11 -stdlib=libc++
+CXXFLAGS =  -std=c++11 -stdlib=libc++
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -240,7 +290,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -L ~/git/libmot/src
+LDFLAGS = 
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
@@ -255,6 +305,9 @@ PACKAGE_TARNAME = libmsc
 PACKAGE_URL = 
 PACKAGE_VERSION = 0.0.1
 PATH_SEPARATOR = :
+PKG_CONFIG = /usr/local/bin/pkg-config
+PKG_CONFIG_LIBDIR = 
+PKG_CONFIG_PATH = 
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/sh
@@ -295,6 +348,10 @@ infodir = ${datarootdir}/info
 install_sh = ${SHELL} /Users/ben.poor/git/libmsc/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
+libmot_CFLAGS = /Users/ben.poor/git/libmot/src
+libmot_LIBS = /Users/ben.poor/git/libmot/src/
+libzmq_CFLAGS = /Users/ben.poor/git/libzmq/include
+libzmq_LIBS = /Users/ben.poor/git/libzmq/src/.libs
 localedir = ${datarootdir}/locale
 localstatedir = ${prefix}/var
 mandir = ${datarootdir}/man
@@ -316,13 +373,19 @@ target_vendor = apple
 top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
+SUBDIRS = . output
 lib_LIBRARIES = libmsc.a
 libmsc_a_SOURCES = common.cpp common.h \
                    datagroups.cpp datagroups.h \
                    packets.cpp packets.h \
+                   output.cpp output.h \
+                   output/console_output.cpp output/console_output.h \
+                   output/zmq_output.cpp output/zmq_output.h \
                    util.h 
 
-all: all-am
+libmsc_a_CPPFLAGS = -I${libmot_CFLAGS} -I${libzmq_CFLAGS}
+libmsc_a_LIBADD = -L${libmot_LIBS} -lmot -L${libzmq_LIBS} -lzmq
+all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .cpp .o .obj
@@ -386,6 +449,16 @@ uninstall-libLIBRARIES:
 
 clean-libLIBRARIES:
 	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
+output/$(am__dirstamp):
+	@$(MKDIR_P) output
+	@: > output/$(am__dirstamp)
+output/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) output/$(DEPDIR)
+	@: > output/$(DEPDIR)/$(am__dirstamp)
+output/libmsc_a-console_output.$(OBJEXT): output/$(am__dirstamp) \
+	output/$(DEPDIR)/$(am__dirstamp)
+output/libmsc_a-zmq_output.$(OBJEXT): output/$(am__dirstamp) \
+	output/$(DEPDIR)/$(am__dirstamp)
 
 libmsc.a: $(libmsc_a_OBJECTS) $(libmsc_a_DEPENDENCIES) $(EXTRA_libmsc_a_DEPENDENCIES) 
 	$(AM_V_at)-rm -f libmsc.a
@@ -394,13 +467,17 @@ libmsc.a: $(libmsc_a_OBJECTS) $(libmsc_a_DEPENDENCIES) $(EXTRA_libmsc_a_DEPENDEN
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f output/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/common.Po
-include ./$(DEPDIR)/datagroups.Po
-include ./$(DEPDIR)/packets.Po
+include ./$(DEPDIR)/libmsc_a-common.Po
+include ./$(DEPDIR)/libmsc_a-datagroups.Po
+include ./$(DEPDIR)/libmsc_a-output.Po
+include ./$(DEPDIR)/libmsc_a-packets.Po
+include output/$(DEPDIR)/libmsc_a-console_output.Po
+include output/$(DEPDIR)/libmsc_a-zmq_output.Po
 
 .cpp.o:
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -418,14 +495,145 @@ include ./$(DEPDIR)/packets.Po
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
+libmsc_a-common.o: common.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-common.o -MD -MP -MF $(DEPDIR)/libmsc_a-common.Tpo -c -o libmsc_a-common.o `test -f 'common.cpp' || echo '$(srcdir)/'`common.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-common.Tpo $(DEPDIR)/libmsc_a-common.Po
+#	$(AM_V_CXX)source='common.cpp' object='libmsc_a-common.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-common.o `test -f 'common.cpp' || echo '$(srcdir)/'`common.cpp
+
+libmsc_a-common.obj: common.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-common.obj -MD -MP -MF $(DEPDIR)/libmsc_a-common.Tpo -c -o libmsc_a-common.obj `if test -f 'common.cpp'; then $(CYGPATH_W) 'common.cpp'; else $(CYGPATH_W) '$(srcdir)/common.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-common.Tpo $(DEPDIR)/libmsc_a-common.Po
+#	$(AM_V_CXX)source='common.cpp' object='libmsc_a-common.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-common.obj `if test -f 'common.cpp'; then $(CYGPATH_W) 'common.cpp'; else $(CYGPATH_W) '$(srcdir)/common.cpp'; fi`
+
+libmsc_a-datagroups.o: datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-datagroups.o -MD -MP -MF $(DEPDIR)/libmsc_a-datagroups.Tpo -c -o libmsc_a-datagroups.o `test -f 'datagroups.cpp' || echo '$(srcdir)/'`datagroups.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-datagroups.Tpo $(DEPDIR)/libmsc_a-datagroups.Po
+#	$(AM_V_CXX)source='datagroups.cpp' object='libmsc_a-datagroups.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-datagroups.o `test -f 'datagroups.cpp' || echo '$(srcdir)/'`datagroups.cpp
+
+libmsc_a-datagroups.obj: datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-datagroups.obj -MD -MP -MF $(DEPDIR)/libmsc_a-datagroups.Tpo -c -o libmsc_a-datagroups.obj `if test -f 'datagroups.cpp'; then $(CYGPATH_W) 'datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/datagroups.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-datagroups.Tpo $(DEPDIR)/libmsc_a-datagroups.Po
+#	$(AM_V_CXX)source='datagroups.cpp' object='libmsc_a-datagroups.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-datagroups.obj `if test -f 'datagroups.cpp'; then $(CYGPATH_W) 'datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/datagroups.cpp'; fi`
+
+libmsc_a-packets.o: packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-packets.o -MD -MP -MF $(DEPDIR)/libmsc_a-packets.Tpo -c -o libmsc_a-packets.o `test -f 'packets.cpp' || echo '$(srcdir)/'`packets.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-packets.Tpo $(DEPDIR)/libmsc_a-packets.Po
+#	$(AM_V_CXX)source='packets.cpp' object='libmsc_a-packets.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-packets.o `test -f 'packets.cpp' || echo '$(srcdir)/'`packets.cpp
+
+libmsc_a-packets.obj: packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-packets.obj -MD -MP -MF $(DEPDIR)/libmsc_a-packets.Tpo -c -o libmsc_a-packets.obj `if test -f 'packets.cpp'; then $(CYGPATH_W) 'packets.cpp'; else $(CYGPATH_W) '$(srcdir)/packets.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-packets.Tpo $(DEPDIR)/libmsc_a-packets.Po
+#	$(AM_V_CXX)source='packets.cpp' object='libmsc_a-packets.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-packets.obj `if test -f 'packets.cpp'; then $(CYGPATH_W) 'packets.cpp'; else $(CYGPATH_W) '$(srcdir)/packets.cpp'; fi`
+
+libmsc_a-output.o: output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-output.o -MD -MP -MF $(DEPDIR)/libmsc_a-output.Tpo -c -o libmsc_a-output.o `test -f 'output.cpp' || echo '$(srcdir)/'`output.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-output.Tpo $(DEPDIR)/libmsc_a-output.Po
+#	$(AM_V_CXX)source='output.cpp' object='libmsc_a-output.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-output.o `test -f 'output.cpp' || echo '$(srcdir)/'`output.cpp
+
+libmsc_a-output.obj: output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libmsc_a-output.obj -MD -MP -MF $(DEPDIR)/libmsc_a-output.Tpo -c -o libmsc_a-output.obj `if test -f 'output.cpp'; then $(CYGPATH_W) 'output.cpp'; else $(CYGPATH_W) '$(srcdir)/output.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libmsc_a-output.Tpo $(DEPDIR)/libmsc_a-output.Po
+#	$(AM_V_CXX)source='output.cpp' object='libmsc_a-output.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libmsc_a-output.obj `if test -f 'output.cpp'; then $(CYGPATH_W) 'output.cpp'; else $(CYGPATH_W) '$(srcdir)/output.cpp'; fi`
+
+output/libmsc_a-console_output.o: output/console_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT output/libmsc_a-console_output.o -MD -MP -MF output/$(DEPDIR)/libmsc_a-console_output.Tpo -c -o output/libmsc_a-console_output.o `test -f 'output/console_output.cpp' || echo '$(srcdir)/'`output/console_output.cpp
+	$(AM_V_at)$(am__mv) output/$(DEPDIR)/libmsc_a-console_output.Tpo output/$(DEPDIR)/libmsc_a-console_output.Po
+#	$(AM_V_CXX)source='output/console_output.cpp' object='output/libmsc_a-console_output.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o output/libmsc_a-console_output.o `test -f 'output/console_output.cpp' || echo '$(srcdir)/'`output/console_output.cpp
+
+output/libmsc_a-console_output.obj: output/console_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT output/libmsc_a-console_output.obj -MD -MP -MF output/$(DEPDIR)/libmsc_a-console_output.Tpo -c -o output/libmsc_a-console_output.obj `if test -f 'output/console_output.cpp'; then $(CYGPATH_W) 'output/console_output.cpp'; else $(CYGPATH_W) '$(srcdir)/output/console_output.cpp'; fi`
+	$(AM_V_at)$(am__mv) output/$(DEPDIR)/libmsc_a-console_output.Tpo output/$(DEPDIR)/libmsc_a-console_output.Po
+#	$(AM_V_CXX)source='output/console_output.cpp' object='output/libmsc_a-console_output.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o output/libmsc_a-console_output.obj `if test -f 'output/console_output.cpp'; then $(CYGPATH_W) 'output/console_output.cpp'; else $(CYGPATH_W) '$(srcdir)/output/console_output.cpp'; fi`
+
+output/libmsc_a-zmq_output.o: output/zmq_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT output/libmsc_a-zmq_output.o -MD -MP -MF output/$(DEPDIR)/libmsc_a-zmq_output.Tpo -c -o output/libmsc_a-zmq_output.o `test -f 'output/zmq_output.cpp' || echo '$(srcdir)/'`output/zmq_output.cpp
+	$(AM_V_at)$(am__mv) output/$(DEPDIR)/libmsc_a-zmq_output.Tpo output/$(DEPDIR)/libmsc_a-zmq_output.Po
+#	$(AM_V_CXX)source='output/zmq_output.cpp' object='output/libmsc_a-zmq_output.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o output/libmsc_a-zmq_output.o `test -f 'output/zmq_output.cpp' || echo '$(srcdir)/'`output/zmq_output.cpp
+
+output/libmsc_a-zmq_output.obj: output/zmq_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT output/libmsc_a-zmq_output.obj -MD -MP -MF output/$(DEPDIR)/libmsc_a-zmq_output.Tpo -c -o output/libmsc_a-zmq_output.obj `if test -f 'output/zmq_output.cpp'; then $(CYGPATH_W) 'output/zmq_output.cpp'; else $(CYGPATH_W) '$(srcdir)/output/zmq_output.cpp'; fi`
+	$(AM_V_at)$(am__mv) output/$(DEPDIR)/libmsc_a-zmq_output.Tpo output/$(DEPDIR)/libmsc_a-zmq_output.Po
+#	$(AM_V_CXX)source='output/zmq_output.cpp' object='output/libmsc_a-zmq_output.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libmsc_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o output/libmsc_a-zmq_output.obj `if test -f 'output/zmq_output.cpp'; then $(CYGPATH_W) 'output/zmq_output.cpp'; else $(CYGPATH_W) '$(srcdir)/output/zmq_output.cpp'; fi`
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run 'make' without going through this Makefile.
+# To change the values of 'make' variables: instead of editing Makefiles,
+# (1) if the variable is set in 'config.status', edit 'config.status'
+#     (which will cause the Makefiles to be regenerated when you run 'make');
+# (2) otherwise, pass the desired values on the 'make' command line.
+$(am__recursive_targets):
+	@fail=; \
+	if $(am__make_keepgoing); then \
+	  failcom='fail=yes'; \
+	else \
+	  failcom='exit 1'; \
+	fi; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
-tags: tags-am
+tags: tags-recursive
 TAGS: tags
 
 tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
 	set x; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	$(am__define_uniq_tagged_files); \
 	shift; \
 	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
@@ -438,7 +646,7 @@ tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
 	      $$unique; \
 	  fi; \
 	fi
-ctags: ctags-am
+ctags: ctags-recursive
 
 CTAGS: ctags
 ctags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
@@ -451,7 +659,7 @@ GTAGS:
 	here=`$(am__cd) $(top_builddir) && pwd` \
 	  && $(am__cd) $(top_srcdir) \
 	  && gtags -i $(GTAGS_ARGS) "$$here"
-cscopelist: cscopelist-am
+cscopelist: cscopelist-recursive
 
 cscopelist-am: $(am__tagged_files)
 	list='$(am__tagged_files)'; \
@@ -500,22 +708,48 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    $(am__make_dryrun) \
+	      || test -d "$(distdir)/$$subdir" \
+	      || $(MKDIR_P) "$(distdir)/$$subdir" \
+	      || exit 1; \
+	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
+	    $(am__relativize); \
+	    new_distdir=$$reldir; \
+	    dir1=$$subdir; dir2="$(top_distdir)"; \
+	    $(am__relativize); \
+	    new_top_distdir=$$reldir; \
+	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
+	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
+	    ($(am__cd) $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$new_top_distdir" \
+	        distdir="$$new_distdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+		am__skip_mode_fix=: \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
+	done
 check-am: all-am
-check: check-am
+check: check-recursive
 all-am: Makefile $(LIBRARIES)
-installdirs:
+installdirs: installdirs-recursive
+installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	if test -z '$(STRIP)'; then \
 	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
@@ -533,93 +767,96 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f output/$(DEPDIR)/$(am__dirstamp)
+	-rm -f output/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
 clean-am: clean-generic clean-libLIBRARIES mostlyclean-am
 
-distclean: distclean-am
-	-rm -rf ./$(DEPDIR)
+distclean: distclean-recursive
+	-rm -rf ./$(DEPDIR) output/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
 html-am:
 
-info: info-am
+info: info-recursive
 
 info-am:
 
 install-data-am:
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
 install-exec-am: install-libLIBRARIES
 
-install-html: install-html-am
+install-html: install-html-recursive
 
 install-html-am:
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
 install-pdf-am:
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR)
+maintainer-clean: maintainer-clean-recursive
+	-rm -rf ./$(DEPDIR) output/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
 uninstall-am: uninstall-libLIBRARIES
 
-.MAKE: install-am install-strip
+.MAKE: $(am__recursive_targets) install-am install-strip
 
-.PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
-	clean-libLIBRARIES cscopelist-am ctags ctags-am distclean \
-	distclean-compile distclean-generic distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-libLIBRARIES install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-libLIBRARIES
+.PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
+	check-am clean clean-generic clean-libLIBRARIES cscopelist-am \
+	ctags ctags-am distclean distclean-compile distclean-generic \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am \
+	install-libLIBRARIES install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-libLIBRARIES
 
 .PRECIOUS: Makefile
 

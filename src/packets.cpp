@@ -2,6 +2,7 @@
 #include "common.h"
 
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 using namespace msc;
@@ -13,6 +14,8 @@ Packet::Packet(int size, int continuity, int address, vector<unsigned char> data
 vector<unsigned char> Packet::encode()
 {
 	// packet header 
+    cout << "size: " << size << endl;
+    cout << (size/24)-1 << endl;
 	bitset<24> packet_header(((size / 24) - 1) + // size (2)
 							 (continuity << 2) + // continuity (2)
 						 	 (first << 4) + // first (1)
@@ -20,6 +23,7 @@ vector<unsigned char> Packet::encode()
                              (address << 6) + // address (10)
                              (0 << 16) + // command (1)
                              (data.size() << 17)); // useful data length (7)
+    cout << packet_header << endl;
 
 	// piece the data together
 	vector<unsigned char> bytes;

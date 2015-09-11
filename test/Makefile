@@ -90,7 +90,8 @@ build_triplet = x86_64-apple-darwin14.3.0
 host_triplet = x86_64-apple-darwin14.3.0
 target_triplet = x86_64-apple-darwin14.3.0
 bin_PROGRAMS = test_crc$(EXEEXT) test_datagroups$(EXEEXT) \
-	test_packets$(EXEEXT) write_datagroups$(EXEEXT)
+	test_packets$(EXEEXT) write_datagroups$(EXEEXT) \
+	write_packets$(EXEEXT) test_output$(EXEEXT)
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -106,15 +107,23 @@ PROGRAMS = $(bin_PROGRAMS)
 am_test_crc_OBJECTS = test_crc.$(OBJEXT)
 test_crc_OBJECTS = $(am_test_crc_OBJECTS)
 test_crc_DEPENDENCIES =
-am_test_datagroups_OBJECTS = test_datagroups.$(OBJEXT)
+am_test_datagroups_OBJECTS =  \
+	test_datagroups-test_datagroups.$(OBJEXT)
 test_datagroups_OBJECTS = $(am_test_datagroups_OBJECTS)
 test_datagroups_DEPENDENCIES =
-am_test_packets_OBJECTS = test_packets.$(OBJEXT)
+am_test_output_OBJECTS = test_output-test_output.$(OBJEXT)
+test_output_OBJECTS = $(am_test_output_OBJECTS)
+test_output_DEPENDENCIES =
+am_test_packets_OBJECTS = test_packets-test_packets.$(OBJEXT)
 test_packets_OBJECTS = $(am_test_packets_OBJECTS)
 test_packets_DEPENDENCIES =
-am_write_datagroups_OBJECTS = write_datagroups.$(OBJEXT)
+am_write_datagroups_OBJECTS =  \
+	write_datagroups-write_datagroups.$(OBJEXT)
 write_datagroups_OBJECTS = $(am_write_datagroups_OBJECTS)
 write_datagroups_DEPENDENCIES =
+am_write_packets_OBJECTS = write_packets-write_packets.$(OBJEXT)
+write_packets_OBJECTS = $(am_write_packets_OBJECTS)
+write_packets_DEPENDENCIES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -131,6 +140,10 @@ DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
+AM_V_lt = $(am__v_lt_$(V))
+am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
+am__v_lt_0 = --silent
+am__v_lt_1 = 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 AM_V_CXX = $(am__v_CXX_$(V))
@@ -145,9 +158,11 @@ am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
 SOURCES = $(test_crc_SOURCES) $(test_datagroups_SOURCES) \
-	$(test_packets_SOURCES) $(write_datagroups_SOURCES)
+	$(test_output_SOURCES) $(test_packets_SOURCES) \
+	$(write_datagroups_SOURCES) $(write_packets_SOURCES)
 DIST_SOURCES = $(test_crc_SOURCES) $(test_datagroups_SOURCES) \
-	$(test_packets_SOURCES) $(write_datagroups_SOURCES)
+	$(test_output_SOURCES) $(test_packets_SOURCES) \
+	$(write_datagroups_SOURCES) $(write_packets_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -190,7 +205,7 @@ CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O0 -I ~/git/libmot/src/ -std=c++11 -stdlib=libc++
+CXXFLAGS =  -std=c++11 -stdlib=libc++
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -206,7 +221,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -L ~/git/libmot/src
+LDFLAGS = 
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
@@ -221,6 +236,9 @@ PACKAGE_TARNAME = libmsc
 PACKAGE_URL = 
 PACKAGE_VERSION = 0.0.1
 PATH_SEPARATOR = :
+PKG_CONFIG = /usr/local/bin/pkg-config
+PKG_CONFIG_LIBDIR = 
+PKG_CONFIG_PATH = 
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/sh
@@ -261,6 +279,10 @@ infodir = ${datarootdir}/info
 install_sh = ${SHELL} /Users/ben.poor/git/libmsc/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
+libmot_CFLAGS = /Users/ben.poor/git/libmot/src
+libmot_LIBS = /Users/ben.poor/git/libmot/src/
+libzmq_CFLAGS = /Users/ben.poor/git/libzmq/include
+libzmq_LIBS = /Users/ben.poor/git/libzmq/src/.libs
 localedir = ${datarootdir}/locale
 localstatedir = ${prefix}/var
 mandir = ${datarootdir}/man
@@ -285,13 +307,20 @@ top_srcdir = ..
 test_crc_SOURCES = test_crc.cpp
 test_crc_LDADD = -L../src -lmsc
 test_datagroups_SOURCES = test_datagroups.cpp
-test_datagroups_LDADD = -L../src -lmsc -lmot
+test_datagroups_CPPFLAGS = -I../src -I${libmot_CFLAGS}
+test_datagroups_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot
 test_packets_SOURCES = test_packets.cpp
-test_packets_LDADD = -L../src -lmsc -lmot
+test_packets_CPPFLAGS = -I../src -I${libmot_CFLAGS}
+test_packets_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot
 write_datagroups_SOURCES = write_datagroups.cpp
-write_datagroups_LDADD = -L../src -lmsc -lmot
+write_datagroups_CPPFLAGS = -I../src -I${libmot_CFLAGS}
+write_datagroups_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot
 write_packets_SOURCES = write_packets.cpp
-write_packets_LDADD = -L../src -lmsc -lmot
+write_packets_CPPFLAGS = -I../src -I${libmot_CFLAGS}
+write_packets_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot
+test_output_SOURCES = test_output.cpp
+test_output_CPPFLAGS = -I../src -I${libmot_CFLAGS} -I${libzmq_CFLAGS}
+test_output_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot -L${libzmq_LIBS} -lzmq
 all: all-am
 
 .SUFFIXES:
@@ -376,6 +405,10 @@ test_datagroups$(EXEEXT): $(test_datagroups_OBJECTS) $(test_datagroups_DEPENDENC
 	@rm -f test_datagroups$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(test_datagroups_OBJECTS) $(test_datagroups_LDADD) $(LIBS)
 
+test_output$(EXEEXT): $(test_output_OBJECTS) $(test_output_DEPENDENCIES) $(EXTRA_test_output_DEPENDENCIES) 
+	@rm -f test_output$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_output_OBJECTS) $(test_output_LDADD) $(LIBS)
+
 test_packets$(EXEEXT): $(test_packets_OBJECTS) $(test_packets_DEPENDENCIES) $(EXTRA_test_packets_DEPENDENCIES) 
 	@rm -f test_packets$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(test_packets_OBJECTS) $(test_packets_LDADD) $(LIBS)
@@ -384,6 +417,10 @@ write_datagroups$(EXEEXT): $(write_datagroups_OBJECTS) $(write_datagroups_DEPEND
 	@rm -f write_datagroups$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(write_datagroups_OBJECTS) $(write_datagroups_LDADD) $(LIBS)
 
+write_packets$(EXEEXT): $(write_packets_OBJECTS) $(write_packets_DEPENDENCIES) $(EXTRA_write_packets_DEPENDENCIES) 
+	@rm -f write_packets$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(write_packets_OBJECTS) $(write_packets_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -391,9 +428,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 include ./$(DEPDIR)/test_crc.Po
-include ./$(DEPDIR)/test_datagroups.Po
-include ./$(DEPDIR)/test_packets.Po
-include ./$(DEPDIR)/write_datagroups.Po
+include ./$(DEPDIR)/test_datagroups-test_datagroups.Po
+include ./$(DEPDIR)/test_output-test_output.Po
+include ./$(DEPDIR)/test_packets-test_packets.Po
+include ./$(DEPDIR)/write_datagroups-write_datagroups.Po
+include ./$(DEPDIR)/write_packets-write_packets.Po
 
 .cpp.o:
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -410,6 +449,76 @@ include ./$(DEPDIR)/write_datagroups.Po
 #	$(AM_V_CXX)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+test_datagroups-test_datagroups.o: test_datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_datagroups-test_datagroups.o -MD -MP -MF $(DEPDIR)/test_datagroups-test_datagroups.Tpo -c -o test_datagroups-test_datagroups.o `test -f 'test_datagroups.cpp' || echo '$(srcdir)/'`test_datagroups.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/test_datagroups-test_datagroups.Tpo $(DEPDIR)/test_datagroups-test_datagroups.Po
+#	$(AM_V_CXX)source='test_datagroups.cpp' object='test_datagroups-test_datagroups.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_datagroups-test_datagroups.o `test -f 'test_datagroups.cpp' || echo '$(srcdir)/'`test_datagroups.cpp
+
+test_datagroups-test_datagroups.obj: test_datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_datagroups-test_datagroups.obj -MD -MP -MF $(DEPDIR)/test_datagroups-test_datagroups.Tpo -c -o test_datagroups-test_datagroups.obj `if test -f 'test_datagroups.cpp'; then $(CYGPATH_W) 'test_datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/test_datagroups.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/test_datagroups-test_datagroups.Tpo $(DEPDIR)/test_datagroups-test_datagroups.Po
+#	$(AM_V_CXX)source='test_datagroups.cpp' object='test_datagroups-test_datagroups.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_datagroups-test_datagroups.obj `if test -f 'test_datagroups.cpp'; then $(CYGPATH_W) 'test_datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/test_datagroups.cpp'; fi`
+
+test_output-test_output.o: test_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_output-test_output.o -MD -MP -MF $(DEPDIR)/test_output-test_output.Tpo -c -o test_output-test_output.o `test -f 'test_output.cpp' || echo '$(srcdir)/'`test_output.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/test_output-test_output.Tpo $(DEPDIR)/test_output-test_output.Po
+#	$(AM_V_CXX)source='test_output.cpp' object='test_output-test_output.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_output-test_output.o `test -f 'test_output.cpp' || echo '$(srcdir)/'`test_output.cpp
+
+test_output-test_output.obj: test_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_output-test_output.obj -MD -MP -MF $(DEPDIR)/test_output-test_output.Tpo -c -o test_output-test_output.obj `if test -f 'test_output.cpp'; then $(CYGPATH_W) 'test_output.cpp'; else $(CYGPATH_W) '$(srcdir)/test_output.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/test_output-test_output.Tpo $(DEPDIR)/test_output-test_output.Po
+#	$(AM_V_CXX)source='test_output.cpp' object='test_output-test_output.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_output-test_output.obj `if test -f 'test_output.cpp'; then $(CYGPATH_W) 'test_output.cpp'; else $(CYGPATH_W) '$(srcdir)/test_output.cpp'; fi`
+
+test_packets-test_packets.o: test_packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_packets-test_packets.o -MD -MP -MF $(DEPDIR)/test_packets-test_packets.Tpo -c -o test_packets-test_packets.o `test -f 'test_packets.cpp' || echo '$(srcdir)/'`test_packets.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/test_packets-test_packets.Tpo $(DEPDIR)/test_packets-test_packets.Po
+#	$(AM_V_CXX)source='test_packets.cpp' object='test_packets-test_packets.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_packets-test_packets.o `test -f 'test_packets.cpp' || echo '$(srcdir)/'`test_packets.cpp
+
+test_packets-test_packets.obj: test_packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test_packets-test_packets.obj -MD -MP -MF $(DEPDIR)/test_packets-test_packets.Tpo -c -o test_packets-test_packets.obj `if test -f 'test_packets.cpp'; then $(CYGPATH_W) 'test_packets.cpp'; else $(CYGPATH_W) '$(srcdir)/test_packets.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/test_packets-test_packets.Tpo $(DEPDIR)/test_packets-test_packets.Po
+#	$(AM_V_CXX)source='test_packets.cpp' object='test_packets-test_packets.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test_packets-test_packets.obj `if test -f 'test_packets.cpp'; then $(CYGPATH_W) 'test_packets.cpp'; else $(CYGPATH_W) '$(srcdir)/test_packets.cpp'; fi`
+
+write_datagroups-write_datagroups.o: write_datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT write_datagroups-write_datagroups.o -MD -MP -MF $(DEPDIR)/write_datagroups-write_datagroups.Tpo -c -o write_datagroups-write_datagroups.o `test -f 'write_datagroups.cpp' || echo '$(srcdir)/'`write_datagroups.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/write_datagroups-write_datagroups.Tpo $(DEPDIR)/write_datagroups-write_datagroups.Po
+#	$(AM_V_CXX)source='write_datagroups.cpp' object='write_datagroups-write_datagroups.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o write_datagroups-write_datagroups.o `test -f 'write_datagroups.cpp' || echo '$(srcdir)/'`write_datagroups.cpp
+
+write_datagroups-write_datagroups.obj: write_datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT write_datagroups-write_datagroups.obj -MD -MP -MF $(DEPDIR)/write_datagroups-write_datagroups.Tpo -c -o write_datagroups-write_datagroups.obj `if test -f 'write_datagroups.cpp'; then $(CYGPATH_W) 'write_datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/write_datagroups.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/write_datagroups-write_datagroups.Tpo $(DEPDIR)/write_datagroups-write_datagroups.Po
+#	$(AM_V_CXX)source='write_datagroups.cpp' object='write_datagroups-write_datagroups.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o write_datagroups-write_datagroups.obj `if test -f 'write_datagroups.cpp'; then $(CYGPATH_W) 'write_datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/write_datagroups.cpp'; fi`
+
+write_packets-write_packets.o: write_packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT write_packets-write_packets.o -MD -MP -MF $(DEPDIR)/write_packets-write_packets.Tpo -c -o write_packets-write_packets.o `test -f 'write_packets.cpp' || echo '$(srcdir)/'`write_packets.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/write_packets-write_packets.Tpo $(DEPDIR)/write_packets-write_packets.Po
+#	$(AM_V_CXX)source='write_packets.cpp' object='write_packets-write_packets.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o write_packets-write_packets.o `test -f 'write_packets.cpp' || echo '$(srcdir)/'`write_packets.cpp
+
+write_packets-write_packets.obj: write_packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT write_packets-write_packets.obj -MD -MP -MF $(DEPDIR)/write_packets-write_packets.Tpo -c -o write_packets-write_packets.obj `if test -f 'write_packets.cpp'; then $(CYGPATH_W) 'write_packets.cpp'; else $(CYGPATH_W) '$(srcdir)/write_packets.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/write_packets-write_packets.Tpo $(DEPDIR)/write_packets-write_packets.Po
+#	$(AM_V_CXX)source='write_packets.cpp' object='write_packets-write_packets.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(write_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o write_packets-write_packets.obj `if test -f 'write_packets.cpp'; then $(CYGPATH_W) 'write_packets.cpp'; else $(CYGPATH_W) '$(srcdir)/write_packets.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

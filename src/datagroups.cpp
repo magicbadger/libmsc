@@ -1,5 +1,6 @@
 #include "datagroups.h"
 #include "common.h"
+#include <iostream>
 
 using namespace std;
 using namespace msc;
@@ -61,6 +62,7 @@ vector<Datagroup*> DatagroupEncoder::encode_datagroups(vector<Segment*> segments
         Datagroup* datagroup = new Datagroup(segment, i%16);
         datagroups.push_back(datagroup);
         i++;
+        last_type = segment->getType();
     }
 
     return datagroups;
