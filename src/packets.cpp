@@ -13,17 +13,14 @@ Packet::Packet(int size, int continuity, int address, vector<unsigned char> data
 
 vector<unsigned char> Packet::encode()
 {
-	// packet header 
-    cout << "size: " << size << endl;
-    cout << (size/24)-1 << endl;
-	bitset<24> packet_header(((size / 24) - 1) + // size (2)
-							 (continuity << 2) + // continuity (2)
-						 	 (first << 4) + // first (1)
-							 (last << 5) + // last (1)
-                             (address << 6) + // address (10)
-                             (0 << 16) + // command (1)
-                             (data.size() << 17)); // useful data length (7)
-    cout << packet_header << endl;
+    // packet header 
+	bitset<24> packet_header(data.size() +  // useful data length (7)
+                             (0 << 7) + // command (1)
+                             (address << 8) + // address (10)
+							 (last << 18) + // last (1)
+						 	 (first << 19) + // first (1)
+							 (continuity << 20) + // continuity (2)
+                             ((size/24-1) << 22)); // size (2)
 
 	// piece the data together
 	vector<unsigned char> bytes;
@@ -33,7 +30,8 @@ vector<unsigned char> Packet::encode()
 	bytes = bytes + data; 
 
     // padding
-    vector<unsigned char> padding(size - bytes.size(), (char)0);
+    vector<unsigned char> padding(size - bytes.size() - 2, (char)0);
+    //cout << "packet size is " << size << " with " << bytes.size() << " of data, so adding " << padding.size() << " bytes of padding" << endl;
     bytes = bytes + padding;
 
 	// calculate CRC
@@ -66,7 +64,7 @@ vector<Packet*> PacketEncoder::encode_packets(vector<Datagroup*> datagroups)
             advance(start, step);
             bool last = (step < size); 
             packets.push_back(new Packet(size, continuity, address, chunk, first, last));
-            continuity = continuity%4;;
+            continuity = (continuity+1)%4;;
         }
     }
 
