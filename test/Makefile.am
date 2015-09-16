@@ -1,4 +1,4 @@
-bin_PROGRAMS = test_crc test_datagroups test_packets write_datagroups write_packets test_output
+bin_PROGRAMS = test_crc test_datagroups test_packets write_datagroups write_packets test_output zmq_listen
 
 test_crc_SOURCES = test_crc.cpp
 test_crc_LDADD = -L../src -lmsc
@@ -22,3 +22,7 @@ write_packets_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot
 test_output_SOURCES = test_output.cpp
 test_output_CPPFLAGS = -I../src -I${libmot_CFLAGS} -I${libzmq_CFLAGS}
 test_output_LDADD = -L../src -lmsc -L${libmot_LIBS} -lmot -L${libzmq_LIBS} -lzmq
+
+zmq_listen_SOURCES = zmq_listen.cpp
+zmq_listen_CPPFLAGS = -I${libzmq_CFLAGS}
+zmq_listen_LDADD = -L${libzmq_LIBS} -lzmq
