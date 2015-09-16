@@ -31,7 +31,6 @@ vector<unsigned char> Packet::encode()
 
     // padding
     vector<unsigned char> padding(size - bytes.size() - 2, (char)0);
-    //cout << "packet size is " << size << " with " << bytes.size() << " of data, so adding " << padding.size() << " bytes of padding" << endl;
     bytes = bytes + padding;
 
 	// calculate CRC
@@ -57,14 +56,15 @@ vector<Packet*> PacketEncoder::encode_packets(vector<Datagroup*> datagroups)
         while(end != data.end())
         {
             int b = distance(end, data.end());
-            int step = min(size, b);
+            int step = min(size - 3 - 2, b);
             advance(end, step);
             vector<unsigned char> chunk(end - start);
             copy(start, end, chunk.begin());
             advance(start, step);
-            bool last = (step < size); 
+            bool last = (end == data.end()); 
             packets.push_back(new Packet(size, continuity, address, chunk, first, last));
             continuity = (continuity+1)%4;;
+            first = false;
         }
     }
 
