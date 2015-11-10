@@ -5,9 +5,9 @@
 #include <mot.h>
 #include <contenttypes.h>
 
-#include "../src/datagroups.h"
-#include "../src/output.h"
-#include "../src/output/zmq_output.h"
+#include "datagroups.h"
+#include "output.h"
+#include "output/zmq_output.h"
 
 using namespace std;
 using namespace mot;
@@ -31,13 +31,11 @@ int main() {
     Output* output = new ZmqOutput("tcp://localhost:8001");
 	cout << "opening output: " << output << endl;
     output->Open();
-    while(true) {
     for(Datagroup* datagroup : datagroups)
     {
 		cout << "writing datagroup to output" << endl;
         output->Write(datagroup->encode());
         sleep(2);
-    }
     }
 	cout << "closing output" << endl;
     output->Close();

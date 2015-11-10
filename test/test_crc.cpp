@@ -1,21 +1,19 @@
-#define CATCH_CONFIG_MAIN
-
 #include <vector>
 #include <iostream>
 
-#include "catch.hpp"
-#include "../src/common.h"
+#include "common.h"
 
 using namespace std;
 
-TEST_CASE( "CRC encoding tests", "[msc]" ) {
-
-	SECTION ("CRC") {
-		string data("123456789");
-		vector<unsigned char> bytes;
-		copy(data.begin(), data.end(), back_inserter(bytes));
-        unsigned short crc = calculate_crc(bytes);
-        REQUIRE(crc == 0x906e);
-	}
-
+int main() {
+    cout << "1";
+    string data("123456789");
+    cout << "2";
+    vector<unsigned char> bytes;
+    cout << "3";
+    copy(data.begin(), data.end(), back_inserter(bytes));
+    cout << "4";
+    unsigned short crc = calculate_crc(bytes);
+    cout << "5";
+    return crc != 0x906e;
 }

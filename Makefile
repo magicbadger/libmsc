@@ -156,20 +156,23 @@ src_libmsc_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(src_libmsc_la_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
-am__EXEEXT_1 = tests/test_crc$(EXEEXT) tests/test_output$(EXEEXT) \
-	tests/test_datagroups$(EXEEXT) tests/test_packets$(EXEEXT)
-am_tests_test_crc_OBJECTS = tests/test_crc.$(OBJEXT)
-tests_test_crc_OBJECTS = $(am_tests_test_crc_OBJECTS)
-tests_test_crc_DEPENDENCIES = src/libmsc.la
-am_tests_test_datagroups_OBJECTS = tests/test_datagroups.$(OBJEXT)
-tests_test_datagroups_OBJECTS = $(am_tests_test_datagroups_OBJECTS)
-tests_test_datagroups_DEPENDENCIES = src/libmsc.la
-am_tests_test_output_OBJECTS = tests/test_output.$(OBJEXT)
-tests_test_output_OBJECTS = $(am_tests_test_output_OBJECTS)
-tests_test_output_DEPENDENCIES = src/libmsc.la
-am_tests_test_packets_OBJECTS = tests/test_packets.$(OBJEXT)
-tests_test_packets_OBJECTS = $(am_tests_test_packets_OBJECTS)
-tests_test_packets_DEPENDENCIES = src/libmsc.la
+am__EXEEXT_1 = test/test_crc$(EXEEXT) test/test_output$(EXEEXT) \
+	test/test_datagroups$(EXEEXT) test/test_packets$(EXEEXT)
+am_test_test_crc_OBJECTS = test/test_crc.$(OBJEXT)
+test_test_crc_OBJECTS = $(am_test_test_crc_OBJECTS)
+test_test_crc_DEPENDENCIES =
+am_test_test_datagroups_OBJECTS =  \
+	test/test_test_datagroups-test_datagroups.$(OBJEXT)
+test_test_datagroups_OBJECTS = $(am_test_test_datagroups_OBJECTS)
+test_test_datagroups_DEPENDENCIES =
+am_test_test_output_OBJECTS =  \
+	test/test_test_output-test_output.$(OBJEXT)
+test_test_output_OBJECTS = $(am_test_test_output_OBJECTS)
+test_test_output_DEPENDENCIES =
+am_test_test_packets_OBJECTS =  \
+	test/test_test_packets-test_packets.$(OBJEXT)
+test_test_packets_OBJECTS = $(am_test_test_packets_OBJECTS)
+test_test_packets_DEPENDENCIES =
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -222,12 +225,12 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(src_libmsc_la_SOURCES) $(tests_test_crc_SOURCES) \
-	$(tests_test_datagroups_SOURCES) $(tests_test_output_SOURCES) \
-	$(tests_test_packets_SOURCES)
-DIST_SOURCES = $(src_libmsc_la_SOURCES) $(tests_test_crc_SOURCES) \
-	$(tests_test_datagroups_SOURCES) $(tests_test_output_SOURCES) \
-	$(tests_test_packets_SOURCES)
+SOURCES = $(src_libmsc_la_SOURCES) $(test_test_crc_SOURCES) \
+	$(test_test_datagroups_SOURCES) $(test_test_output_SOURCES) \
+	$(test_test_packets_SOURCES)
+DIST_SOURCES = $(src_libmsc_la_SOURCES) $(test_test_crc_SOURCES) \
+	$(test_test_datagroups_SOURCES) $(test_test_output_SOURCES) \
+	$(test_test_packets_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -618,7 +621,7 @@ src_libmsc_la_SOURCES = \
     src/output/zmq_output.cpp \
     src/output/zmq_output.h
 
-src_libmsc_la_CPPFLAGS = -I include -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS}
+src_libmsc_la_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS}
 src_libmsc_la_CXXFLAGS = 
 src_libmsc_la_LIBADD = -L${LIBMOT_LIBS} -L${LIBZMQ_LIBS}
 
@@ -626,27 +629,30 @@ src_libmsc_la_LIBADD = -L${LIBMOT_LIBS} -L${LIBZMQ_LIBS}
 # Tests
 #
 test_apps = \
-    tests/test_crc \
-    tests/test_output \
-    tests/test_datagroups \
-    tests/test_packets 
+    test/test_crc \
+    test/test_output \
+    test/test_datagroups \
+    test/test_packets 
 
-tests_test_crc_SOURCES = \
-    tests/test_crc.cpp 
+test_test_crc_SOURCES = \
+    test/test_crc.cpp 
 
-tests_test_crc_LDADD = src/libmsc.la
-tests_test_output_SOURCES = \
-    tests/test_output.cpp 
+test_test_crc_LDADD = -Lsrc/.libs -lmsc
+test_test_output_SOURCES = \
+    test/test_output.cpp 
 
-tests_test_output_LDADD = src/libmsc.la
-tests_test_datagroups_SOURCES = \
-    tests/test_datagroups.cpp 
+test_test_output_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS}
+test_test_output_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot -L${LIBZMQ_LIBS} -lzmq
+test_test_datagroups_SOURCES = \
+    test/test_datagroups.cpp 
 
-tests_test_datagroups_LDADD = src/libmsc.la
-tests_test_packets_SOURCES = \
-    tests/test_packets.cpp 
+test_test_datagroups_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
+test_test_datagroups_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
+test_test_packets_SOURCES = \
+    test/test_packets.cpp 
 
-tests_test_packets_LDADD = src/libmsc.la
+test_test_packets_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
+test_test_packets_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
 EXTRA_DIST = COPYING NEWS README.md INSTALL.md LICENCE AUTHORS ChangeLog TODO doc
 all: all-am
 
@@ -774,36 +780,36 @@ clean-checkPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-tests/$(am__dirstamp):
-	@$(MKDIR_P) tests
-	@: > tests/$(am__dirstamp)
-tests/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) tests/$(DEPDIR)
-	@: > tests/$(DEPDIR)/$(am__dirstamp)
-tests/test_crc.$(OBJEXT): tests/$(am__dirstamp) \
-	tests/$(DEPDIR)/$(am__dirstamp)
+test/$(am__dirstamp):
+	@$(MKDIR_P) test
+	@: > test/$(am__dirstamp)
+test/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) test/$(DEPDIR)
+	@: > test/$(DEPDIR)/$(am__dirstamp)
+test/test_crc.$(OBJEXT): test/$(am__dirstamp) \
+	test/$(DEPDIR)/$(am__dirstamp)
 
-tests/test_crc$(EXEEXT): $(tests_test_crc_OBJECTS) $(tests_test_crc_DEPENDENCIES) $(EXTRA_tests_test_crc_DEPENDENCIES) tests/$(am__dirstamp)
-	@rm -f tests/test_crc$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(tests_test_crc_OBJECTS) $(tests_test_crc_LDADD) $(LIBS)
-tests/test_datagroups.$(OBJEXT): tests/$(am__dirstamp) \
-	tests/$(DEPDIR)/$(am__dirstamp)
+test/test_crc$(EXEEXT): $(test_test_crc_OBJECTS) $(test_test_crc_DEPENDENCIES) $(EXTRA_test_test_crc_DEPENDENCIES) test/$(am__dirstamp)
+	@rm -f test/test_crc$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_test_crc_OBJECTS) $(test_test_crc_LDADD) $(LIBS)
+test/test_test_datagroups-test_datagroups.$(OBJEXT):  \
+	test/$(am__dirstamp) test/$(DEPDIR)/$(am__dirstamp)
 
-tests/test_datagroups$(EXEEXT): $(tests_test_datagroups_OBJECTS) $(tests_test_datagroups_DEPENDENCIES) $(EXTRA_tests_test_datagroups_DEPENDENCIES) tests/$(am__dirstamp)
-	@rm -f tests/test_datagroups$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(tests_test_datagroups_OBJECTS) $(tests_test_datagroups_LDADD) $(LIBS)
-tests/test_output.$(OBJEXT): tests/$(am__dirstamp) \
-	tests/$(DEPDIR)/$(am__dirstamp)
+test/test_datagroups$(EXEEXT): $(test_test_datagroups_OBJECTS) $(test_test_datagroups_DEPENDENCIES) $(EXTRA_test_test_datagroups_DEPENDENCIES) test/$(am__dirstamp)
+	@rm -f test/test_datagroups$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_test_datagroups_OBJECTS) $(test_test_datagroups_LDADD) $(LIBS)
+test/test_test_output-test_output.$(OBJEXT): test/$(am__dirstamp) \
+	test/$(DEPDIR)/$(am__dirstamp)
 
-tests/test_output$(EXEEXT): $(tests_test_output_OBJECTS) $(tests_test_output_DEPENDENCIES) $(EXTRA_tests_test_output_DEPENDENCIES) tests/$(am__dirstamp)
-	@rm -f tests/test_output$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(tests_test_output_OBJECTS) $(tests_test_output_LDADD) $(LIBS)
-tests/test_packets.$(OBJEXT): tests/$(am__dirstamp) \
-	tests/$(DEPDIR)/$(am__dirstamp)
+test/test_output$(EXEEXT): $(test_test_output_OBJECTS) $(test_test_output_DEPENDENCIES) $(EXTRA_test_test_output_DEPENDENCIES) test/$(am__dirstamp)
+	@rm -f test/test_output$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_test_output_OBJECTS) $(test_test_output_LDADD) $(LIBS)
+test/test_test_packets-test_packets.$(OBJEXT): test/$(am__dirstamp) \
+	test/$(DEPDIR)/$(am__dirstamp)
 
-tests/test_packets$(EXEEXT): $(tests_test_packets_OBJECTS) $(tests_test_packets_DEPENDENCIES) $(EXTRA_tests_test_packets_DEPENDENCIES) tests/$(am__dirstamp)
-	@rm -f tests/test_packets$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(tests_test_packets_OBJECTS) $(tests_test_packets_LDADD) $(LIBS)
+test/test_packets$(EXEEXT): $(test_test_packets_OBJECTS) $(test_test_packets_DEPENDENCIES) $(EXTRA_test_test_packets_DEPENDENCIES) test/$(am__dirstamp)
+	@rm -f test/test_packets$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(test_test_packets_OBJECTS) $(test_test_packets_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -811,7 +817,7 @@ mostlyclean-compile:
 	-rm -f src/*.lo
 	-rm -f src/output/*.$(OBJEXT)
 	-rm -f src/output/*.lo
-	-rm -f tests/*.$(OBJEXT)
+	-rm -f test/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -822,10 +828,10 @@ include src/$(DEPDIR)/src_libmsc_la-output.Plo
 include src/$(DEPDIR)/src_libmsc_la-packets.Plo
 include src/output/$(DEPDIR)/src_libmsc_la-console_output.Plo
 include src/output/$(DEPDIR)/src_libmsc_la-zmq_output.Plo
-include tests/$(DEPDIR)/test_crc.Po
-include tests/$(DEPDIR)/test_datagroups.Po
-include tests/$(DEPDIR)/test_output.Po
-include tests/$(DEPDIR)/test_packets.Po
+include test/$(DEPDIR)/test_crc.Po
+include test/$(DEPDIR)/test_test_datagroups-test_datagroups.Po
+include test/$(DEPDIR)/test_test_output-test_output.Po
+include test/$(DEPDIR)/test_test_packets-test_packets.Po
 
 .cpp.o:
 	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -893,6 +899,48 @@ src/output/src_libmsc_la-zmq_output.lo: src/output/zmq_output.cpp
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libmsc_la_CPPFLAGS) $(CPPFLAGS) $(src_libmsc_la_CXXFLAGS) $(CXXFLAGS) -c -o src/output/src_libmsc_la-zmq_output.lo `test -f 'src/output/zmq_output.cpp' || echo '$(srcdir)/'`src/output/zmq_output.cpp
 
+test/test_test_datagroups-test_datagroups.o: test/test_datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_datagroups-test_datagroups.o -MD -MP -MF test/$(DEPDIR)/test_test_datagroups-test_datagroups.Tpo -c -o test/test_test_datagroups-test_datagroups.o `test -f 'test/test_datagroups.cpp' || echo '$(srcdir)/'`test/test_datagroups.cpp
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_datagroups-test_datagroups.Tpo test/$(DEPDIR)/test_test_datagroups-test_datagroups.Po
+#	$(AM_V_CXX)source='test/test_datagroups.cpp' object='test/test_test_datagroups-test_datagroups.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_datagroups-test_datagroups.o `test -f 'test/test_datagroups.cpp' || echo '$(srcdir)/'`test/test_datagroups.cpp
+
+test/test_test_datagroups-test_datagroups.obj: test/test_datagroups.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_datagroups-test_datagroups.obj -MD -MP -MF test/$(DEPDIR)/test_test_datagroups-test_datagroups.Tpo -c -o test/test_test_datagroups-test_datagroups.obj `if test -f 'test/test_datagroups.cpp'; then $(CYGPATH_W) 'test/test_datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_datagroups.cpp'; fi`
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_datagroups-test_datagroups.Tpo test/$(DEPDIR)/test_test_datagroups-test_datagroups.Po
+#	$(AM_V_CXX)source='test/test_datagroups.cpp' object='test/test_test_datagroups-test_datagroups.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_datagroups-test_datagroups.obj `if test -f 'test/test_datagroups.cpp'; then $(CYGPATH_W) 'test/test_datagroups.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_datagroups.cpp'; fi`
+
+test/test_test_output-test_output.o: test/test_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_output-test_output.o -MD -MP -MF test/$(DEPDIR)/test_test_output-test_output.Tpo -c -o test/test_test_output-test_output.o `test -f 'test/test_output.cpp' || echo '$(srcdir)/'`test/test_output.cpp
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_output-test_output.Tpo test/$(DEPDIR)/test_test_output-test_output.Po
+#	$(AM_V_CXX)source='test/test_output.cpp' object='test/test_test_output-test_output.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_output-test_output.o `test -f 'test/test_output.cpp' || echo '$(srcdir)/'`test/test_output.cpp
+
+test/test_test_output-test_output.obj: test/test_output.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_output-test_output.obj -MD -MP -MF test/$(DEPDIR)/test_test_output-test_output.Tpo -c -o test/test_test_output-test_output.obj `if test -f 'test/test_output.cpp'; then $(CYGPATH_W) 'test/test_output.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_output.cpp'; fi`
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_output-test_output.Tpo test/$(DEPDIR)/test_test_output-test_output.Po
+#	$(AM_V_CXX)source='test/test_output.cpp' object='test/test_test_output-test_output.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_output_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_output-test_output.obj `if test -f 'test/test_output.cpp'; then $(CYGPATH_W) 'test/test_output.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_output.cpp'; fi`
+
+test/test_test_packets-test_packets.o: test/test_packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_packets-test_packets.o -MD -MP -MF test/$(DEPDIR)/test_test_packets-test_packets.Tpo -c -o test/test_test_packets-test_packets.o `test -f 'test/test_packets.cpp' || echo '$(srcdir)/'`test/test_packets.cpp
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_packets-test_packets.Tpo test/$(DEPDIR)/test_test_packets-test_packets.Po
+#	$(AM_V_CXX)source='test/test_packets.cpp' object='test/test_test_packets-test_packets.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_packets-test_packets.o `test -f 'test/test_packets.cpp' || echo '$(srcdir)/'`test/test_packets.cpp
+
+test/test_test_packets-test_packets.obj: test/test_packets.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_packets-test_packets.obj -MD -MP -MF test/$(DEPDIR)/test_test_packets-test_packets.Tpo -c -o test/test_test_packets-test_packets.obj `if test -f 'test/test_packets.cpp'; then $(CYGPATH_W) 'test/test_packets.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_packets.cpp'; fi`
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_packets-test_packets.Tpo test/$(DEPDIR)/test_test_packets-test_packets.Po
+#	$(AM_V_CXX)source='test/test_packets.cpp' object='test/test_test_packets-test_packets.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_packets_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_packets-test_packets.obj `if test -f 'test/test_packets.cpp'; then $(CYGPATH_W) 'test/test_packets.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_packets.cpp'; fi`
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
@@ -900,7 +948,7 @@ clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf src/.libs src/_libs
 	-rm -rf src/output/.libs src/output/_libs
-	-rm -rf tests/.libs tests/_libs
+	-rm -rf test/.libs test/_libs
 
 distclean-libtool:
 	-rm -f libtool config.lt
@@ -1126,30 +1174,30 @@ recheck: all $(check_PROGRAMS)
 	        am__force_recheck=am--force-recheck \
 	        TEST_LOGS="$$log_list"; \
 	exit $$?
-tests/test_crc.log: tests/test_crc$(EXEEXT)
-	@p='tests/test_crc$(EXEEXT)'; \
-	b='tests/test_crc'; \
+test/test_crc.log: test/test_crc$(EXEEXT)
+	@p='test/test_crc$(EXEEXT)'; \
+	b='test/test_crc'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-tests/test_output.log: tests/test_output$(EXEEXT)
-	@p='tests/test_output$(EXEEXT)'; \
-	b='tests/test_output'; \
+test/test_output.log: test/test_output$(EXEEXT)
+	@p='test/test_output$(EXEEXT)'; \
+	b='test/test_output'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-tests/test_datagroups.log: tests/test_datagroups$(EXEEXT)
-	@p='tests/test_datagroups$(EXEEXT)'; \
-	b='tests/test_datagroups'; \
+test/test_datagroups.log: test/test_datagroups$(EXEEXT)
+	@p='test/test_datagroups$(EXEEXT)'; \
+	b='test/test_datagroups'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-tests/test_packets.log: tests/test_packets$(EXEEXT)
-	@p='tests/test_packets$(EXEEXT)'; \
-	b='tests/test_packets'; \
+test/test_packets.log: test/test_packets$(EXEEXT)
+	@p='test/test_packets$(EXEEXT)'; \
+	b='test/test_packets'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1373,8 +1421,8 @@ distclean-generic:
 	-rm -f src/$(am__dirstamp)
 	-rm -f src/output/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/output/$(am__dirstamp)
-	-rm -f tests/$(DEPDIR)/$(am__dirstamp)
-	-rm -f tests/$(am__dirstamp)
+	-rm -f test/$(DEPDIR)/$(am__dirstamp)
+	-rm -f test/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -1386,7 +1434,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR) src/output/$(DEPDIR) tests/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/output/$(DEPDIR) test/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -1434,7 +1482,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR) src/output/$(DEPDIR) tests/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/output/$(DEPDIR) test/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
