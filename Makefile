@@ -142,9 +142,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 src_libmsc_la_DEPENDENCIES =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_src_libmsc_la_OBJECTS = src/src_libmsc_la-common.lo \
-	src/src_libmsc_la-datagroups.lo src/src_libmsc_la-output.lo \
-	src/src_libmsc_la-packets.lo \
+am_src_libmsc_la_OBJECTS = src/src_libmsc_la-datagroups.lo \
+	src/src_libmsc_la-output.lo src/src_libmsc_la-packets.lo \
 	src/output/src_libmsc_la-console_output.lo \
 	src/output/src_libmsc_la-zmq_output.lo
 src_libmsc_la_OBJECTS = $(am_src_libmsc_la_OBJECTS)
@@ -158,7 +157,7 @@ src_libmsc_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	-o $@
 am__EXEEXT_1 = test/test_crc$(EXEEXT) test/test_output$(EXEEXT) \
 	test/test_datagroups$(EXEEXT) test/test_packets$(EXEEXT)
-am_test_test_crc_OBJECTS = test/test_crc.$(OBJEXT)
+am_test_test_crc_OBJECTS = test/test_test_crc-test_crc.$(OBJEXT)
 test_test_crc_OBJECTS = $(am_test_test_crc_OBJECTS)
 test_test_crc_DEPENDENCIES =
 am_test_test_datagroups_OBJECTS =  \
@@ -610,12 +609,9 @@ include_HEADERS = \
     include/packets.h
 
 src_libmsc_la_SOURCES = \
-    src/common.h \
-    src/common.cpp \
     src/datagroups.cpp \
     src/output.cpp \
     src/packets.cpp \
-    util.h \
     src/output/console_output.cpp \
     src/output/console_output.h \
     src/output/zmq_output.cpp \
@@ -637,7 +633,8 @@ test_apps = \
 test_test_crc_SOURCES = \
     test/test_crc.cpp 
 
-test_test_crc_LDADD = -Lsrc/.libs -lmsc
+test_test_crc_CPPFLAGS = -Iinclude
+test_test_crc_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
 test_test_output_SOURCES = \
     test/test_output.cpp 
 
@@ -749,8 +746,6 @@ src/$(am__dirstamp):
 src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: > src/$(DEPDIR)/$(am__dirstamp)
-src/src_libmsc_la-common.lo: src/$(am__dirstamp) \
-	src/$(DEPDIR)/$(am__dirstamp)
 src/src_libmsc_la-datagroups.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/src_libmsc_la-output.lo: src/$(am__dirstamp) \
@@ -786,7 +781,7 @@ test/$(am__dirstamp):
 test/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) test/$(DEPDIR)
 	@: > test/$(DEPDIR)/$(am__dirstamp)
-test/test_crc.$(OBJEXT): test/$(am__dirstamp) \
+test/test_test_crc-test_crc.$(OBJEXT): test/$(am__dirstamp) \
 	test/$(DEPDIR)/$(am__dirstamp)
 
 test/test_crc$(EXEEXT): $(test_test_crc_OBJECTS) $(test_test_crc_DEPENDENCIES) $(EXTRA_test_test_crc_DEPENDENCIES) test/$(am__dirstamp)
@@ -822,13 +817,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include src/$(DEPDIR)/src_libmsc_la-common.Plo
 include src/$(DEPDIR)/src_libmsc_la-datagroups.Plo
 include src/$(DEPDIR)/src_libmsc_la-output.Plo
 include src/$(DEPDIR)/src_libmsc_la-packets.Plo
 include src/output/$(DEPDIR)/src_libmsc_la-console_output.Plo
 include src/output/$(DEPDIR)/src_libmsc_la-zmq_output.Plo
-include test/$(DEPDIR)/test_crc.Po
+include test/$(DEPDIR)/test_test_crc-test_crc.Po
 include test/$(DEPDIR)/test_test_datagroups-test_datagroups.Po
 include test/$(DEPDIR)/test_test_output-test_output.Po
 include test/$(DEPDIR)/test_test_packets-test_packets.Po
@@ -856,13 +850,6 @@ include test/$(DEPDIR)/test_test_packets-test_packets.Po
 #	$(AM_V_CXX)source='$<' object='$@' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(LTCXXCOMPILE) -c -o $@ $<
-
-src/src_libmsc_la-common.lo: src/common.cpp
-	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libmsc_la_CPPFLAGS) $(CPPFLAGS) $(src_libmsc_la_CXXFLAGS) $(CXXFLAGS) -MT src/src_libmsc_la-common.lo -MD -MP -MF src/$(DEPDIR)/src_libmsc_la-common.Tpo -c -o src/src_libmsc_la-common.lo `test -f 'src/common.cpp' || echo '$(srcdir)/'`src/common.cpp
-	$(AM_V_at)$(am__mv) src/$(DEPDIR)/src_libmsc_la-common.Tpo src/$(DEPDIR)/src_libmsc_la-common.Plo
-#	$(AM_V_CXX)source='src/common.cpp' object='src/src_libmsc_la-common.lo' libtool=yes \
-#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libmsc_la_CPPFLAGS) $(CPPFLAGS) $(src_libmsc_la_CXXFLAGS) $(CXXFLAGS) -c -o src/src_libmsc_la-common.lo `test -f 'src/common.cpp' || echo '$(srcdir)/'`src/common.cpp
 
 src/src_libmsc_la-datagroups.lo: src/datagroups.cpp
 	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libmsc_la_CPPFLAGS) $(CPPFLAGS) $(src_libmsc_la_CXXFLAGS) $(CXXFLAGS) -MT src/src_libmsc_la-datagroups.lo -MD -MP -MF src/$(DEPDIR)/src_libmsc_la-datagroups.Tpo -c -o src/src_libmsc_la-datagroups.lo `test -f 'src/datagroups.cpp' || echo '$(srcdir)/'`src/datagroups.cpp
@@ -898,6 +885,20 @@ src/output/src_libmsc_la-zmq_output.lo: src/output/zmq_output.cpp
 #	$(AM_V_CXX)source='src/output/zmq_output.cpp' object='src/output/src_libmsc_la-zmq_output.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_libmsc_la_CPPFLAGS) $(CPPFLAGS) $(src_libmsc_la_CXXFLAGS) $(CXXFLAGS) -c -o src/output/src_libmsc_la-zmq_output.lo `test -f 'src/output/zmq_output.cpp' || echo '$(srcdir)/'`src/output/zmq_output.cpp
+
+test/test_test_crc-test_crc.o: test/test_crc.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_crc_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_crc-test_crc.o -MD -MP -MF test/$(DEPDIR)/test_test_crc-test_crc.Tpo -c -o test/test_test_crc-test_crc.o `test -f 'test/test_crc.cpp' || echo '$(srcdir)/'`test/test_crc.cpp
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_crc-test_crc.Tpo test/$(DEPDIR)/test_test_crc-test_crc.Po
+#	$(AM_V_CXX)source='test/test_crc.cpp' object='test/test_test_crc-test_crc.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_crc_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_crc-test_crc.o `test -f 'test/test_crc.cpp' || echo '$(srcdir)/'`test/test_crc.cpp
+
+test/test_test_crc-test_crc.obj: test/test_crc.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_crc_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_crc-test_crc.obj -MD -MP -MF test/$(DEPDIR)/test_test_crc-test_crc.Tpo -c -o test/test_test_crc-test_crc.obj `if test -f 'test/test_crc.cpp'; then $(CYGPATH_W) 'test/test_crc.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_crc.cpp'; fi`
+	$(AM_V_at)$(am__mv) test/$(DEPDIR)/test_test_crc-test_crc.Tpo test/$(DEPDIR)/test_test_crc-test_crc.Po
+#	$(AM_V_CXX)source='test/test_crc.cpp' object='test/test_test_crc-test_crc.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_crc_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o test/test_test_crc-test_crc.obj `if test -f 'test/test_crc.cpp'; then $(CYGPATH_W) 'test/test_crc.cpp'; else $(CYGPATH_W) '$(srcdir)/test/test_crc.cpp'; fi`
 
 test/test_test_datagroups-test_datagroups.o: test/test_datagroups.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(test_test_datagroups_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT test/test_test_datagroups-test_datagroups.o -MD -MP -MF test/$(DEPDIR)/test_test_datagroups-test_datagroups.Tpo -c -o test/test_test_datagroups-test_datagroups.o `test -f 'test/test_datagroups.cpp' || echo '$(srcdir)/'`test/test_datagroups.cpp

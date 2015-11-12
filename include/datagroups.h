@@ -40,6 +40,8 @@ namespace msc {
 
     };
 
+    unsigned short calculate_crc(std::vector<unsigned char> data);
+
 }
 
-#endif
+#endif // DATAGROUPS_H_

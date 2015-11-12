@@ -10,12 +10,9 @@ include_HEADERS = \
     include/packets.h
 
 src_libmsc_la_SOURCES = \
-    src/common.h \
-    src/common.cpp \
     src/datagroups.cpp \
     src/output.cpp \
     src/packets.cpp \
-    util.h \
     src/output/console_output.cpp \
     src/output/console_output.h \
     src/output/zmq_output.cpp \
@@ -37,7 +34,8 @@ test_apps = \
 
 test_test_crc_SOURCES = \
     test/test_crc.cpp 
-test_test_crc_LDADD = -Lsrc/.libs -lmsc
+test_test_crc_CPPFLAGS = -Iinclude
+test_test_crc_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
 
 test_test_output_SOURCES = \
     test/test_output.cpp 

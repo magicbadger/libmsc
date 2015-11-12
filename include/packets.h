@@ -4,7 +4,6 @@
 #include <vector>
 #include <stdlib.h>
 
-#include "common.h"
 #include "datagroups.h"
 
 using namespace std;

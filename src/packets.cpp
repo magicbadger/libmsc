@@ -1,8 +1,8 @@
-#include "packets.h"
-#include "common.h"
-
 #include <algorithm>
 #include <iostream>
+
+#include "packets.h"
+#include "msc_util.h"
 
 using namespace std;
 using namespace msc;
