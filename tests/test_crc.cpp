@@ -1,9 +1,10 @@
 #include <vector>
 #include <iostream>
 
-#include "datagroups.h"
+#include <datagroups.h>
 
 using namespace std;
+using namespace msc;
 
 int main() {
     cout << "1";

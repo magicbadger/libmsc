@@ -4,33 +4,46 @@
 #include "msc_util.h"
 
 using namespace std;
-using namespace msc;
 
-Datagroup::Datagroup(Segment* segment, int continuity)
-	: segment(segment), continuity(continuity)
+msc::Datagroup::Datagroup(vector<unsigned char> data, unsigned int type, unsigned int continuity, 
+                     unsigned int repetition) :
+	data(data), type(type), continuity(continuity), repetition(repetition)
 { }
 
-vector<unsigned char> Datagroup::encode() const
+msc::Datagroup::Datagroup(vector<unsigned char> data, unsigned int type, unsigned int continuity, 
+                  unsigned int repetition, bool last, unsigned int segment_number) :
+	data(data), type(type), continuity(continuity), repetition(repetition), last(last),
+	segment_number(segment_number)
+{ }
+
+msc::Datagroup::Datagroup(vector<unsigned char> data, unsigned int type, unsigned int continuity, 
+                  unsigned int repetition, bool last, unsigned int segment_number, 
+                  unsigned int transport_id) :
+	data(data), type(type), continuity(continuity), repetition(repetition), last(last),
+	segment_number(segment_number), transport_id(transport_id)
+{ }
+
+vector<unsigned char> msc::Datagroup::encode() const
 {
 	// MSC data group header
-	bitset<16> datagroup_header_bits(segment->getRepetition() + // remaining repetition (4)
-									(continuity << 4) + // continuity (4)
-									(segment->getType() << 8) + // datagroup type (4)
-									(1 << 12) + // user access flag (1)
-									(1 << 13) + // segment flag (1)
-									(1 << 14) + // CRC flag (1)
-									(0 << 15)); // extension flag (1)
+	bitset<16> datagroup_header_bits(repetition + // remaining repetition (4)
+				 	 (continuity << 4) + // continuity (4)
+					 (type << 8) + // datagroup type (4)
+					 (1 << 12) + // user access flag (1)
+					 (1 << 13) + // segment flag (1)
+					 (1 << 14) + // CRC flag (1)
+					 (0 << 15)); // extension flag (1)
 
 	// segment field
-	bitset<16> session_header_bits(segment->getIndex() + // segment number (15)
-								  (segment->isLast() << 15)); // last (1)
-
+	bitset<16> session_header_bits(segment_number + // segment number (15)
+				       (last << 15)); // last (1)
 
 	// user access field
-	bitset<24> useraccess_field_bits(segment->getTransportId() + // transport ID (16)
-									(2 << 16) + // user access length indicator (4)
-									(1 << 20) + // transport ID flag (1)
-									(0 << 21)); // RFA (3)
+	bitset<24> useraccess_field_bits(transport_id + // transport ID (16)
+					 (2 << 16) + // user access length indicator (4)
+					 (1 << 20) + // transport ID flag (1)
+					 (0 << 21)); // RFA (3)
+
 	// piece the data together
 	vector<unsigned char> bytes;
 
@@ -40,33 +53,13 @@ vector<unsigned char> Datagroup::encode() const
 	bytes = bytes + bits_to_bytes(useraccess_field_bits);
 
 	// data payload
-	bytes = bytes + segment->encode();
+	bytes = bytes + data;
 
 	// calculate CRC
-    vector<unsigned char> crc_data = bits_to_bytes(bitset<16>(calculate_crc(bytes)));
+        vector<unsigned char> crc_data = bits_to_bytes(bitset<16>(calculate_crc(bytes)));
 	bytes = bytes + crc_data; 
 
 	return bytes;
-}
-
-DatagroupEncoder::DatagroupEncoder()
-{}
-
-vector<Datagroup*> DatagroupEncoder::encode_datagroups(vector<Segment*> segments)
-{
-    SegmentDatagroupType last_type;
-    vector<Datagroup*> datagroups;
-    int i = 0;
-    for(Segment* segment : segments)
-    {
-        if(last_type && last_type != segment->getType()) i = 0;
-        Datagroup* datagroup = new Datagroup(segment, i%16);
-        datagroups.push_back(datagroup);
-        i++;
-        last_type = segment->getType();
-    }
-
-    return datagroups;
 }
 
 static const unsigned int table[256] = {
@@ -104,7 +97,7 @@ static const unsigned int table[256] = {
     0x7BC7U,0x6A4EU,0x58D5U,0x495CU,0x3DE3U,0x2C6AU,0x1EF1U,0x0F78U,
 };
 
-unsigned short calculate_crc(vector<unsigned char> buf)
+unsigned short msc::calculate_crc(vector<unsigned char> buf)
 {
     unsigned short crc = 0xFFFFU;
     for(auto c : buf) {

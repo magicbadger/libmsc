@@ -2,10 +2,11 @@
 #include <iostream>
 
 #include <mot.h>
-#include <contenttypes.h>
+#include <mot_contenttypes.h>
 
 #include "datagroups.h"
-#include "src/util.h"
+#include "datagroups_mot.h"
+#include "msc_util.h"
 
 using namespace std;
 using namespace mot;

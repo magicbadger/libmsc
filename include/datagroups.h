@@ -3,9 +3,6 @@
 
 #include <vector>
 
-#include <mot.h>
-
-using namespace mot;
 using namespace std;
 
 namespace msc {
@@ -15,32 +12,38 @@ namespace msc {
 
     public:
 
-        Datagroup(Segment* segment, int continuity);
+	Datagroup(vector<unsigned char> data, unsigned int type, unsigned int continuity, 
+		  unsigned int repetition);
 
-        vector<unsigned char> encode() const;
+	Datagroup(vector<unsigned char> data, unsigned int type, unsigned int continuity, 
+		  unsigned int repetition, bool last, unsigned int segment_number);
 
-    private:
+	Datagroup(vector<unsigned char> data, unsigned int type, unsigned int continuity, 
+		  unsigned int repetition, bool last, unsigned int segment_number, 
+		  unsigned int transport_id);
 
-        Segment* segment;
+	vector<unsigned char> encode() const;
 
-        int continuity;
-
-    };
-
-    class DatagroupEncoder
-    {
-
-    public:
-
-        DatagroupEncoder();
-
-        vector<Datagroup*> encode_datagroups(vector<Segment*> segments);
 
     private:
 
+	vector<unsigned char> data;
+
+	unsigned int type;
+
+	unsigned int continuity;
+
+	unsigned int repetition;
+
+	bool last;
+
+	unsigned int segment_number;
+
+	unsigned int transport_id;
+
     };
 
-    unsigned short calculate_crc(std::vector<unsigned char> data);
+    unsigned short calculate_crc(vector<unsigned char> data);
 
 }
 

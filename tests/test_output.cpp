@@ -3,9 +3,10 @@
 #include <unistd.h>
 
 #include <mot.h>
-#include <contenttypes.h>
+#include <mot_contenttypes.h>
 
-#include "datagroups.h"
+#include <datagroups.h>
+#include <datagroups_mot.h>
 #include "output.h"
 #include "output/zmq_output.h"
 
