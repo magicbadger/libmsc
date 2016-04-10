@@ -127,6 +127,7 @@ esac
 # Checks for libraries
 PKG_CHECK_MODULES([LIBMOT], [mot]) # libmot
 PKG_CHECK_MODULES([LIBZMQ], [zmq]) # libzmq
+PKG_CHECK_MODULES([LIBSODIUM], [sodium]) # libsodium
 
 # Check whether to build docs / install man pages
 LIBMSC_CHECK_DOC_BUILD

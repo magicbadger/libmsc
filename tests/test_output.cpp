@@ -3,12 +3,10 @@
 #include <unistd.h>
 
 #include <mot.h>
-#include <mot_contenttypes.h>
+#include <mot/contenttypes.h>
 
-#include <datagroups.h>
-#include <datagroups_mot.h>
-#include "output.h"
-#include "output/zmq_output.h"
+#include <msc/datagroups.h>
+#include <msc/output/zmq.h>
 
 using namespace std;
 using namespace mot;
@@ -18,24 +16,24 @@ int main() {
     string data("=====");
     vector<unsigned char> bytes;
     copy(data.begin(), data.end(), back_inserter(bytes));
-    SequentialTransportIdGenerator* id = SequentialTransportIdGenerator::getInstance(8541);
-    int transportId = id->next();
+    SequentialTransportIdGenerator id(8541);
+    int transportId = id.Next();
     MotObject o(transportId, "TestObject", bytes, ContentTypes::Text::ASCII);
-    o.addParameter(new MimeType("application/txt"));
+    o.AddParameter(new MimeType("application/txt"));
     SegmentEncoder segment_encoder;
-    vector<Segment*> segments = segment_encoder.encode(o);
+    vector<Segment> segments = segment_encoder.Encode(o);
     DatagroupEncoder datagroup_encoder; 
-    vector<Datagroup*> datagroups = datagroup_encoder.encode_datagroups(segments);
+    vector<Datagroup> datagroups = datagroup_encoder.Encode(segments);
 
     //Output* output = new ConsoleOutput();
 	cout << "creating output" << endl;
     Output* output = new ZmqOutput("tcp://localhost:8001");
 	cout << "opening output: " << output << endl;
     output->Open();
-    for(Datagroup* datagroup : datagroups)
+    for(Datagroup datagroup : datagroups)
     {
 		cout << "writing datagroup to output" << endl;
-        output->Write(datagroup->encode());
+        output->Write(datagroup.Encode());
         sleep(2);
     }
 	cout << "closing output" << endl;

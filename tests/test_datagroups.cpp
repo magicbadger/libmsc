@@ -2,11 +2,10 @@
 #include <iostream>
 
 #include <mot.h>
-#include <mot_contenttypes.h>
+#include <mot/contenttypes.h>
 
-#include "datagroups.h"
-#include "datagroups_mot.h"
-#include "msc_util.h"
+#include <msc/datagroups.h>
+#include "msc/util.h"
 
 using namespace std;
 using namespace mot;
@@ -16,21 +15,21 @@ int main() {
     string data("=====");
     vector<unsigned char> bytes;
     copy(data.begin(), data.end(), back_inserter(bytes));
-    SequentialTransportIdGenerator* id = SequentialTransportIdGenerator::getInstance(8541);
-    int transportId = id->next();
+    SequentialTransportIdGenerator id(8541);
+    int transportId = id.Next();
     MotObject o(transportId, "TestObject", bytes, ContentTypes::Text::ASCII);
-    o.addParameter(new MimeType("application/txt"));
+    o.AddParameter(new MimeType("application/txt"));
     SegmentEncoder encoder;
-    vector<Segment*> segments = encoder.encode(o);
+    vector<Segment> segments = encoder.Encode(o);
     cout << "encoded into " << segments.size() << " segments" << endl;
     DatagroupEncoder datagroupEncoder;
-    vector<Datagroup*> datagroups = datagroupEncoder.encode_datagroups(segments);
+    vector<Datagroup> datagroups = datagroupEncoder.Encode(segments);
     cout << "encoded into " << datagroups.size() << " datagroups" << endl;
-    for(Datagroup* datagroup : datagroups)
+    for(Datagroup datagroup : datagroups)
     {
         cout << "datagroup" << endl;
         cout << "=========" << endl;
-        cout << datagroup->encode();
+        cout << datagroup.Encode();
         cout << endl;
     }
 }

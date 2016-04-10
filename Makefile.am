@@ -6,20 +6,17 @@ ACLOCAL_AMFLAGS=-I config
 lib_LTLIBRARIES = src/libmsc.la
 
 include_HEADERS = \
-    include/datagroups.h \
-    include/datagroups_mot.h \
-    include/packets.h
+    include/msc/datagroups.h \
+    include/msc/packets.h \
+    include/msc/output/console.h \
+    include/msc/output/zmq.h
 
 src_libmsc_la_SOURCES = \
-    src/datagroups.cpp \
-    src/datagroups_mot.cpp \
-    src/output.cpp \
-    src/packets.cpp \
-    src/output/console_output.cpp \
-    src/output/console_output.h \
-    src/output/zmq_output.cpp \
-    src/output/zmq_output.h
-
+    src/msc/datagroups.cpp \
+    src/msc/output.cpp \
+    src/msc/packets.cpp \
+    src/msc/output/console.cpp \
+    src/msc/output/zmq.cpp 
 
 src_libmsc_la_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS}
 src_libmsc_la_CXXFLAGS = @LIBMSC_EXTRA_CXXFLAGS@
@@ -36,13 +33,13 @@ test_apps = \
 
 tests_test_crc_SOURCES = \
     tests/test_crc.cpp 
-tests_test_crc_CPPFLAGS = -Iinclude
+tests_test_crc_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
 tests_test_crc_LDADD = -Lsrc/.libs -lmsc
 
 tests_test_output_SOURCES = \
     tests/test_output.cpp 
 tests_test_output_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS}
-tests_test_output_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot -L${LIBZMQ_LIBS} -lzmq
+tests_test_output_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot -L${LIBZMQ_LIBS} -lzmq -L${LIBSODIUM_LIBS} -lsodium
 
 tests_test_datagroups_SOURCES = \
     tests/test_datagroups.cpp 
