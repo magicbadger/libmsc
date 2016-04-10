@@ -16,7 +16,7 @@ using namespace msc;
 
 int main() {
     // data payload
-    string data("==========");
+    string data(120, '=');
     vector<unsigned char> bytes;
     copy(data.begin(), data.end(), back_inserter(bytes));
 
@@ -26,24 +26,39 @@ int main() {
     o.AddParameter(new MimeType("application/txt"));
     SegmentEncoder encoder;
     vector<Segment> segments = encoder.Encode(o);
-    cout << "encoded into " << segments.size() << " segments" << endl;
-    ASSERT("segments", segments.size(), 2);
-
     DatagroupEncoder datagroupEncoder;
     vector<Datagroup> datagroups = datagroupEncoder.Encode(segments);
-    cout << "encoded into " << datagroups.size() << " datagroups" << endl;
-    ASSERT("datagroups", datagroups.size(), 2);
 
     PacketEncoder packetEncoder(1, 96);
     vector<Packet> packets = packetEncoder.Encode(datagroups);
     cout << "encoded into " << packets.size() << " packets" << endl;
-    ASSERT("packets", packets.size(), 2);
+    ASSERT("number of packets", packets.size(), 3);
 
-    ASSERT("packet 1", bytes_to_hex(packets.at(0).Encode()),
-            "CC 01 30 73 00 80 00 12 21 5D 00 25 00 00 00 A0 12 82 00 CC 0B 40 54 65 73 74 4F 62 6A 65 63 74 D0 0F 61 70 70 6C 69 63 61 74 69 6F 6E 2F 74 78 74 62 B2 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 D3 E2");
+    // examine each packet
+    Packet p1 = packets.at(0);
+    cout << "checking first packet" << endl;
+    ASSERT("packet 1: data", bytes_to_hex(p1.Encode()),
+            "CC 01 30 73 00 80 00 12 21 5D 00 25 00 00 07 80 12 82 00 CC 0B 40 54 65 73 74 4F 62 6A 65 63 74 D0 0F 61 70 70 6C 69 63 61 74 69 6F 6E 2F 74 78 74 2A 17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 47 2A");
+    ASSERT("packet 1: address", p1.Address(), 1);
+    ASSERT("packet 1: first", p1.First(), true);
+    ASSERT("packet 1: last", p1.Last(), true);
+    ASSERT("packet 1: continuity index", p1.Continuity(), 0);
 
-    ASSERT("packet 2", bytes_to_hex(packets.at(1).Encode()),
-            "DC 01 15 74 00 80 00 12 21 5D 00 0A 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D CF 6F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 9E EB");
+    Packet p2 = packets.at(1);
+    ASSERT("packet 2: data", bytes_to_hex(p2.Encode()),
+            "D8 01 5B 74 00 80 00 12 21 5D 00 78 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D C1 EC");
+    ASSERT("packet 2: address", p2.Address(), 1);
+    ASSERT("packet 2: first", p2.First(), true);
+    ASSERT("packet 2: last", p2.Last(), false);
+    ASSERT("packet 2: continuity index", p2.Continuity(), 1);
+
+    Packet p3 = packets.at(2);
+    ASSERT("packet 3: data", bytes_to_hex(p3.Encode()),
+            "E4 01 28 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 3D 26 D3 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 C1 87");
+    ASSERT("packet 3: address", p3.Address(), 1);
+    ASSERT("packet 3: first", p3.First(), false);
+    ASSERT("packet 3: last", p3.Last(), true);
+    ASSERT("packet 3: continuity index", p3.Continuity(), 2);
 
     return 0;
 }
