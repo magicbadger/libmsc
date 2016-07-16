@@ -17,7 +17,7 @@ Entirely couple with `libmot` (https://github.com/magicbadger/libmot), in the re
 
 # Examples
 
-Encoding a simple text MOT object into Datagroups and write out the resultant data to the console. 
+Encoding a simple text MOT object into Datagroups and write out the resultant data to the console as a set of hex pairs.
 
 ```cpp
 #include <vector>
@@ -70,17 +70,23 @@ int main() {
 
 # building
 
+``
 libtoolize (or glibtoolize on mac)
 aclocal
 automake --add-missing
 autoreconf
 ./configure
 make
+``
 
 # installing
 
+``
 make install
+``
 
 # uninstalling
 
+``
 make uninstall
+``
