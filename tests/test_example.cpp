@@ -1,25 +1,3 @@
-libmsc
-======
-
-Encoder/Decoder for MSC Datagroup and Packet data as per ETSI 300 401 Section 5.3, Main Service Channel (MSC).
-
-# Current Status
-
-Able to do some simple encoding of MOT objects to MSC Datagroups and MSC Packets. 
-
-Entirely couple with `libmot` (https://github.com/magicbadger/libmot), in the respect that it can only encode MOT `Segment` objects.
-
-# TODO
-
-* Decouple from libmot (provide methods to encode non MOT segment data)
-* Datagroup decoding
-* Packet decoding
-
-# Examples
-
-Encoding a simple text MOT object into Datagroups and write out the resultant data to the console. 
-
-```cpp
 #include <vector>
 #include <iostream>
 
@@ -48,7 +26,7 @@ int main() {
     // setup the encoders
     SegmentEncoder segment_encoder;
     DatagroupEncoder datagroup_encoder;
-    PacketEncoder packet_encoder(1, PacketSize::Size_96);
+    PacketEncoder packet_encoder(1, PacketSize::Size_96); 
 
     // encode to segments
     vector<Segment> segments = segment_encoder.Encode(o);
@@ -66,21 +44,3 @@ int main() {
 
     return  0;
 }
-```
-
-# building
-
-libtoolize (or glibtoolize on mac)
-aclocal
-automake --add-missing
-autoreconf
-./configure
-make
-
-# installing
-
-make install
-
-# uninstalling
-
-make uninstall

@@ -30,7 +30,8 @@ test_apps = \
     tests/test_output \
     tests/test_datagroups_headermode \
     tests/test_datagroups_directorymode \
-    tests/test_packets 
+    tests/test_packets \
+    tests/test_example
 
 tests_test_crc_SOURCES = \
     tests/test_crc.cpp 
@@ -56,6 +57,11 @@ tests_test_packets_SOURCES = \
     tests/test_packets.cpp 
 tests_test_packets_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
 tests_test_packets_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
+
+tests_test_example_SOURCES = \
+    tests/test_example.cpp 
+tests_test_example_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
+tests_test_example_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
 
 check_PROGRAMS = ${test_apps}
 
