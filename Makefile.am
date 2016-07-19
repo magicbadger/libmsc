@@ -31,33 +31,33 @@ test_apps = \
 
 tests_test_crc_SOURCES = \
     tests/test_crc.cpp 
-tests_test_crc_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
+tests_test_crc_CPPFLAGS = -Iinclude ${LIBMOT_CFLAGS} 
 tests_test_crc_LDADD = -Lsrc/.libs -lmsc
 
 tests_test_output_SOURCES = \
     tests/test_output.cpp 
-tests_test_output_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS}
-tests_test_output_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot -L${LIBZMQ_LIBS} -lzmq -L${LIBSODIUM_LIBS} -lsodium
+tests_test_output_CPPFLAGS = -Iinclude ${LIBMOT_CFLAGS} ${LIBZMQ_CFLAGS}
+tests_test_output_LDADD = -Lsrc/.libs -lmsc ${LIBMOT_LIBS} ${LIBZMQ_LIBS} ${LIBSODIUM_LIBS}
 
 tests_test_datagroups_headermode_SOURCES = \
     tests/test_datagroups_headermode.cpp 
-tests_test_datagroups_headermode_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
-tests_test_datagroups_headermode_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
+tests_test_datagroups_headermode_CPPFLAGS = -Iinclude ${LIBMOT_CFLAGS}
+tests_test_datagroups_headermode_LDADD = -Lsrc/.libs -lmsc ${LIBMOT_LIBS}
 
 tests_test_datagroups_directorymode_SOURCES = \
     tests/test_datagroups_directorymode.cpp 
-tests_test_datagroups_directorymode_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
-tests_test_datagroups_directorymode_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
+tests_test_datagroups_directorymode_CPPFLAGS = -Iinclude ${LIBMOT_CFLAGS}
+tests_test_datagroups_directorymode_LDADD = -Lsrc/.libs -lmsc ${LIBMOT_LIBS}
 
 tests_test_packets_SOURCES = \
     tests/test_packets.cpp 
-tests_test_packets_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
-tests_test_packets_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
+tests_test_packets_CPPFLAGS = -Iinclude ${LIBMOT_CFLAGS}
+tests_test_packets_LDADD = -Lsrc/.libs -lmsc ${LIBMOT_LIBS}
 
 tests_test_example_SOURCES = \
     tests/test_example.cpp 
-tests_test_example_CPPFLAGS = -Iinclude -I${LIBMOT_CFLAGS}
-tests_test_example_LDADD = -Lsrc/.libs -lmsc -L${LIBMOT_LIBS} -lmot
+tests_test_example_CPPFLAGS = -Iinclude ${LIBMOT_CFLAGS}
+tests_test_example_LDADD = -Lsrc/.libs -lmsc ${LIBMOT_LIBS}
 
 check_PROGRAMS = ${test_apps}
 
