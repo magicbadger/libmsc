@@ -125,9 +125,9 @@ case "${host_os}" in
 esac
 
 # Checks for libraries
-PKG_CHECK_MODULES([LIBMOT], [mot]) # libmot
-PKG_CHECK_MODULES([LIBZMQ], [zmq]) # libzmq
-PKG_CHECK_MODULES([LIBSODIUM], [sodium]) # libsodium
+PKG_CHECK_MODULES([LIBMOT], [libmot]) # libmot
+PKG_CHECK_MODULES([LIBZMQ], [libzmq]) # libzmq
+PKG_CHECK_MODULES([LIBSODIUM], [libsodium]) # libsodium
 
 # Check whether to build docs / install man pages
 LIBMSC_CHECK_DOC_BUILD
@@ -184,7 +184,7 @@ AC_SUBST([pkgconfigdir])
 
 AC_CONFIG_FILES([ \
     Makefile \
-    src/libmsc.pc \
+    libmsc.pc \
     doc/Makefile])
 
 AC_OUTPUT
