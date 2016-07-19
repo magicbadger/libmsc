@@ -1,5 +1,7 @@
 ACLOCAL_AMFLAGS=-I config
 
+SUBDIRS = doc include
+
 #
 # Library 
 #
