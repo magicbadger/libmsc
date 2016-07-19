@@ -3,6 +3,11 @@ libmsc
 
 Encoder/Decoder for MSC Datagroup and Packet data as per ETSI 300 401 Section 5.3, Main Service Channel (MSC).
 
+# Dependencies
+
+* zeromq
+* libmot
+
 # Current Status
 
 Able to do some simple encoding of MOT objects to MSC Datagroups and MSC Packets. 
@@ -71,10 +76,7 @@ int main() {
 # building
 
 ``
-libtoolize (or glibtoolize on mac)
-aclocal
-automake --add-missing
-autoreconf
+autoreconf -if
 ./configure
 make
 ``
