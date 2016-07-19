@@ -5,12 +5,6 @@ ACLOCAL_AMFLAGS=-I config
 #
 lib_LTLIBRARIES = src/libmsc.la
 
-include_HEADERS = \
-    include/msc/datagroups.h \
-    include/msc/packets.h \
-    include/msc/output/console.h \
-    include/msc/output/zmq.h
-
 src_libmsc_la_SOURCES = \
     src/msc/datagroups.cpp \
     src/msc/output.cpp \

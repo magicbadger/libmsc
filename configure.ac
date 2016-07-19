@@ -184,6 +184,7 @@ AC_SUBST([pkgconfigdir])
 
 AC_CONFIG_FILES([ \
     Makefile \
+    include/Makefile \
     libmsc.pc \
     doc/Makefile])
 
