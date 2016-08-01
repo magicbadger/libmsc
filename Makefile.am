@@ -2,6 +2,8 @@ ACLOCAL_AMFLAGS=-I config
 
 SUBDIRS = doc include
 
+pkgconfig_DATA = libmsc.pc
+
 #
 # Library 
 #
