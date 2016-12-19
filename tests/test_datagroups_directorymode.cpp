@@ -72,7 +72,5 @@ int main() {
     ASSERT("fourth datagroup: type", d4.Type(), 4);
     ASSERT("fourth datagroup: last", d4.Last(), true); 
 
-    cout << bytes_to_hex(d1.Encode()) << " " << bytes_to_hex(d2.Encode()) << " " << bytes_to_hex(d3.Encode()) << " " << bytes_to_hex(d4.Encode());
-
-    return 1;
+    return 0;
 }
