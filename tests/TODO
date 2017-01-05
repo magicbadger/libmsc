@@ -1,0 +1,7 @@
+checkout how the encoders send data to 0MQ
+connection verification, notification of dropout
+message queueing semantics
+lighter weight testing framework (with package that can be installed)
+
+verify packetization (currently giving wrong packet size) - although I think I'm reading it the wrong way around
+download std C++ docs for local reading
