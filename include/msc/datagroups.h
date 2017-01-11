@@ -3,9 +3,6 @@
 
 #include <vector>
 
-#include <mot.h>
-
-using namespace mot;
 using namespace std;
 
 namespace msc {
@@ -59,19 +56,6 @@ namespace msc {
         unsigned int transport_id;
 
     };
-    
-    class DatagroupEncoder
-    {
-
-    public:
-
-        DatagroupEncoder();
-
-        vector<Datagroup> Encode(vector<Segment> segments);
-
-    private:
-
-    };    
 
     unsigned short calculate_crc(vector<unsigned char> data);
 

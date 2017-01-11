@@ -148,6 +148,14 @@ AC_CHECK_HEADERS(\
     sys/socket.h \
     sys/time.h)
 
+# Force not to use mot
+AC_ARG_ENABLE([mot],
+    [AS_HELP_STRING([--disable-mot], [disable mot [default=no]])],
+    [msc_enable_mot=$enableval],
+    [msc_enable_mot=yes])
+
+AM_CONDITIONAL(ENABLE_MOT, test "x$msc_enable_mot" = "xyes")
+
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE

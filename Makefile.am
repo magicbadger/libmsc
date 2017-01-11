@@ -16,9 +16,15 @@ src_libmsc_la_SOURCES = \
     src/msc/output/console.cpp \
     src/msc/output/zmq.cpp 
 
-src_libmsc_la_CPPFLAGS = -Iinclude -I/usr/local/include -I${LIBMOT_CFLAGS} -I${LIBZMQ_CFLAGS} 
+src_libmsc_la_CPPFLAGS = -Iinclude -I/usr/local/include -I${LIBZMQ_CFLAGS} 
 src_libmsc_la_CXXFLAGS = @LIBMSC_EXTRA_CXXFLAGS@
-src_libmsc_la_LIBADD = ${LIBMOT_LIBS} ${LIBZMQ_LIBS}
+src_libmsc_la_LIBADD = ${LIBZMQ_LIBS}
+
+if ENABLE_MOT
+src_libmsc_la_SOURCES += src/msc/segment_encoder.cpp
+src_libmsc_la_CPPFLAGS += -I${LIBMOT_CFLAGS}
+src_libmsc_la_LIBADD += ${LIBMOT_LIBS}
+endif
 
 #
 # Tests
